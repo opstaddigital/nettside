@@ -1,17 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="no">
 <head>
-    <title>Opstad Digital</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opstad Digital | Launching 2026</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; background: #f4f4f4; }
-        .content { background: white; padding: 50px; border-radius: 10px; shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        :root {
+            --primary: #007AFF;
+            --bg: #0a0a0a;
+            --text: #ffffff;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            z-index: 1;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border: 1px solid #333;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        .contact-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        .contact-link:hover {
+            color: var(--primary);
+            border-bottom-color: transparent;
+        }
+        /* Enkel animert bakgrunn */
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.15;
+            border-radius: 50%;
+            animation: move 10s infinite alternate;
+            z-index: 0;
+        }
+        @keyframes move {
+            from { transform: translate(-50%, -50%); }
+            to { transform: translate(50%, 50%); }
+        }
     </style>
 </head>
 <body>
-    <div class="content">
+    <div class="glow"></div>
+    <div class="container">
+        <div class="badge">Coming Soon</div>
         <h1>Opstad Digital</h1>
+        <p>Vi bygger morgendagens digitale løsninger.</p>
         <p>Launching Fall 2026</p>
-        <p>Contact: <a href="mailto:andreas@opstaddigital.no">andreas@opstaddigital.no</a></p>
+        <div style="margin-top: 40px;">
+            <a href="mailto:andreas@opstaddigital.no" class="contact-link">andreas@opstaddigital.no</a>
+        </div>
     </div>
 </body>
 </html>
