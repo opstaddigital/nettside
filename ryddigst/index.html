@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Presisjonsvisning</title>
+    <title>Ryddigst.no - Skreddersydd Organisering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +13,7 @@
             --apple-secondary: #86868b;
             --drawer-wood: #d1d1d1;
             --drawer-inside: #e5e5e5;
+            --apple-blue: #0071e3;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -20,50 +21,78 @@
 
         /* HEADER */
         header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; padding: 0 20px; }
-        .logo-link img { height: 50px; width: auto; display: block; object-fit: contain; }
-        .nav-links a { text-decoration: none; color: var(--apple-text); font-size: 14px; margin-left: 25px; font-weight: 500; }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px; }
+        .logo-link img { height: 60px; width: auto; display: block; object-fit: contain; }
+        .nav-links { display: flex; align-items: center; gap: 30px; }
+        .nav-links a { text-decoration: none; color: var(--apple-text); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--apple-blue); }
+        .cart-status { background: var(--apple-gray); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; }
 
         main { max-width: 1100px; margin: 0 auto; padding: 40px 20px; flex: 1; width: 100%; }
 
-        /* LANDING PAGE / HERO */
-        .hero { text-align: center; padding: 60px 0; max-width: 700px; margin: 0 auto; }
-        .hero h1 { font-size: 48px; font-weight: 600; letter-spacing: -1px; margin-bottom: 20px; }
-        .hero p { font-size: 20px; color: var(--apple-secondary); line-height: 1.5; margin-bottom: 40px; }
+        /* HERO / LANDING */
+        .hero { text-align: center; padding: 80px 0; max-width: 800px; margin: 0 auto; transition: all 0.5s ease; }
+        .hero h1 { font-size: 56px; font-weight: 600; letter-spacing: -2px; margin-bottom: 24px; line-height: 1.1; }
+        .hero p { font-size: 22px; color: var(--apple-secondary); line-height: 1.5; margin-bottom: 40px; font-weight: 400; }
 
-        /* INPUT BOX */
-        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; margin-bottom: 40px; text-align: center; }
-        .input-group { display: flex; gap: 20px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
+        /* INPUT SEKSJON */
+        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; margin-bottom: 40px; text-align: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); }
+        .input-group { display: flex; gap: 24px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
         .input-item { display: flex; flex-direction: column; text-align: left; }
-        .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 5px; text-transform: uppercase; }
-        .input-item input { padding: 12px; border-radius: 12px; border: 1px solid #d2d2d7; width: 120px; font-size: 16px; }
+        .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-item input { padding: 14px; border-radius: 14px; border: 1px solid #d2d2d7; width: 140px; font-size: 18px; outline: none; transition: border-color 0.2s; }
+        .input-item input:focus { border-color: var(--apple-blue); }
 
         /* RESULTATER */
-        .results-grid { display: none; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
-        .card { background: white; border-radius: 24px; padding: 30px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column; }
-        .card h3 { margin-bottom: 20px; font-size: 22px; }
+        .results-grid { display: none; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px; }
+        .card { background: white; border-radius: 28px; padding: 35px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; transition: transform 0.3s ease; }
+        .card h3 { margin-bottom: 24px; font-size: 24px; font-weight: 600; }
 
-        /* VISUALISERING */
-        .drawer-container { background: var(--drawer-wood); padding: 12px; border-radius: 12px; margin-bottom: 25px; width: 100%; overflow: hidden; }
-        .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 2px; width: 100%; }
-        .box-unit { background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0,0,0,0.1); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--apple-secondary); font-weight: 600; }
-
-        /* CHECKBOX FOR MERKELAPPER */
-        .addon-box { background: var(--apple-gray); padding: 15px; border-radius: 14px; margin: 20px 0; display: flex; align-items: center; cursor: pointer; }
-        .addon-box input { margin-right: 12px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--apple-text); }
-        .addon-box label { cursor: pointer; font-size: 14px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; }
-
-        .list { list-style: none; margin: 20px 0; border-top: 1px solid #eee; flex-grow: 1; }
-        .list li { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; border-bottom: 1px solid #f5f5f7; }
-        .total { font-size: 24px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 15px; margin-top: auto; }
+        /* VISUALISERING MED ANIMASJON */
+        .drawer-container { background: var(--drawer-wood); padding: 14px; border-radius: 14px; margin-bottom: 30px; width: 100%; overflow: hidden; box-shadow: inset 0 4px 10px rgba(0,0,0,0.1); }
+        .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 3px; width: 100%; border-radius: 4px; }
         
-        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-weight: 600; margin-top: 20px; cursor: pointer; font-size: 16px; transition: opacity 0.2s; }
-        .btn:hover { opacity: 0.9; }
+        @keyframes boxIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .box-unit { 
+            background: rgba(255, 255, 255, 0.92); 
+            border: 1px solid rgba(0,0,0,0.08); 
+            border-radius: 6px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 11px; 
+            color: var(--apple-secondary); 
+            font-weight: 600; 
+            animation: boxIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* TILLEGGSTJENESTER */
+        .addon-box { background: var(--apple-gray); padding: 18px; border-radius: 16px; margin: 25px 0; display: flex; align-items: center; cursor: pointer; transition: background 0.2s; }
+        .addon-box:hover { background: #ebebed; }
+        .addon-box input { margin-right: 15px; width: 20px; height: 20px; cursor: pointer; accent-color: var(--apple-text); }
+        .addon-box label { cursor: pointer; font-size: 15px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; }
+
+        .list { list-style: none; margin: 25px 0; border-top: 1px solid #eee; flex-grow: 1; }
+        .list li { display: flex; justify-content: space-between; padding: 14px 0; font-size: 15px; border-bottom: 1px solid #f5f5f7; }
+        .total { font-size: 28px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 20px; margin-top: auto; letter-spacing: -1px; }
+        
+        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 18px; border-radius: 16px; font-weight: 600; margin-top: 24px; cursor: pointer; font-size: 17px; transition: all 0.2s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn-secondary { background: var(--apple-blue); }
+
+        /* POPUP VARSEL */
+        #notification { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--apple-text); color: white; padding: 16px 32px; border-radius: 50px; font-weight: 500; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: boxIn 0.3s ease-out; }
 
         /* FOOTER */
-        footer { background: var(--apple-gray); padding: 60px 20px; border-top: 1px solid rgba(0,0,0,0.05); }
-        .footer-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; color: var(--apple-secondary); font-size: 13px; }
-        .footer-links a { color: var(--apple-secondary); text-decoration: none; margin-left: 20px; }
+        footer { background: var(--apple-gray); padding: 80px 20px; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 100px; }
+        .footer-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; color: var(--apple-secondary); font-size: 14px; }
+        .footer-links a { color: var(--apple-secondary); text-decoration: none; margin-left: 30px; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--apple-text); }
     </style>
 </head>
 <body>
@@ -74,86 +103,90 @@
             <img src="pnglogo.png" alt="ryddigst.no">
         </a>
         <div class="nav-links">
-            <a href="#">Produkter</a>
             <a href="#">Inspirasjon</a>
-            <a href="#">Om oss</a>
+            <a href="#">Om Ryddigst</a>
+            <div class="cart-status" id="cart-nav">🛒 Handlekurv (0)</div>
         </div>
     </div>
 </header>
 
 <main>
     <div id="landing-content" class="hero">
-        <h1>Beregnet for dine skuffer.</h1>
-        <p>Glem standardløsninger som aldri passer. Tast inn dine mål, så finner vi den perfekte kombinasjonen av moduler for deg – med millimeterpresisjon.</p>
+        <h1>Perfekt orden.<br>Hver eneste gang.</h1>
+        <p>Glem skuffer der ting flyter. Tast inn målene dine, og se hvordan vi utnytter hver centimeter med våre krystallklare moduler.</p>
     </div>
 
     <div class="calc-box">
         <div class="input-group">
             <div class="input-item"><label>Bredde (cm)</label><input type="number" id="W" value="60"></div>
             <div class="input-item"><label>Dybde (cm)</label><input type="number" id="D" value="50"></div>
-            <button class="btn" style="width: auto; margin: 0; padding: 12px 30px;" onclick="generate()">Beregn forslag</button>
+            <button class="btn" style="width: auto; margin: 0; padding: 14px 40px;" onclick="generate()">Beregn min skuff</button>
         </div>
     </div>
 
     <div class="results-grid" id="res">
         <div class="card">
-            <h3>Alternativ 1: Minimalistisk</h3>
+            <h3>Alt. 1: Minimalistisk</h3>
             <div class="drawer-container"><div id="draw1" class="drawer-inner"></div></div>
             <ul id="list1" class="list"></ul>
             <div class="addon-box" onclick="toggleAddon(1)">
                 <input type="checkbox" id="addon1" onchange="updateTotal(1)">
                 <label>Legg til merkelapper (sett) <span>79,-</span></label>
             </div>
-            <div class="total"><span>Total</span><span id="p1">0,-</span></div>
-            <button class="btn">Legg i handlekurv</button>
+            <div class="total"><span>Sum</span><span id="p1">0,-</span></div>
+            <button class="btn" onclick="addToCart(1)">Legg i handlekurv</button>
         </div>
 
         <div class="card">
-            <h3>Alternativ 2: Maks kapasitet</h3>
+            <h3>Alt. 2: Maks utnyttelse</h3>
             <div class="drawer-container"><div id="draw2" class="drawer-inner"></div></div>
             <ul id="list2" class="list"></ul>
             <div class="addon-box" onclick="toggleAddon(2)">
                 <input type="checkbox" id="addon2" onchange="updateTotal(2)">
                 <label>Legg til merkelapper (sett) <span>79,-</span></label>
             </div>
-            <div class="total"><span>Total</span><span id="p2">0,-</span></div>
-            <button class="btn">Legg i handlekurv</button>
+            <div class="total"><span>Sum</span><span id="p2">0,-</span></div>
+            <button class="btn" onclick="addToCart(2)">Legg i handlekurv</button>
         </div>
     </div>
 </main>
 
+<div id="notification">Varene er lagt i handlekurven!</div>
+
 <footer>
     <div class="footer-container">
-        <div>© 2026 Ryddigst.no. Alle rettigheter reservert.</div>
+        <div>© 2026 Ryddigst.no. En del av Opstad Digital.</div>
         <div class="footer-links">
-            <a href="#">Betingelser</a>
-            <a href="#">Personvern</a>
+            <a href="#">Fraktinfo</a>
+            <a href="#">Vilkår</a>
             <a href="#">Kontakt oss</a>
         </div>
     </div>
 </footer>
 
 <script>
-    // --- PRODUKTER OG PRISER (Enkelt å endre her) ---
+    // --- KONFIGURASJON ---
     const inventory = {
         L: { w: 20, d: 30, p: 149, n: 'Premium Large' },
         M: { w: 10, d: 20, p: 89, n: 'Premium Medium' },
         S: { w: 10, d: 10, p: 59, n: 'Premium Small' }
     };
-    const ADDOON_PRICE = 79;
+    const ADDON_PRICE = 79;
 
     let basePrice1 = 0;
     let basePrice2 = 0;
+    let cartCount = 0;
 
     function generate() {
-        // Skjul landingpage og vis resultater
-        document.getElementById('landing-content').style.display = 'none';
+        document.getElementById('landing-content').style.opacity = '0';
+        setTimeout(() => { document.getElementById('landing-content').style.display = 'none'; }, 500);
+        
         document.getElementById('res').style.display = 'grid';
 
         const W = parseInt(document.getElementById('W').value);
         const D = parseInt(document.getElementById('D').value);
 
-        // Definer plasseringer (x og y er startposisjon i cm)
+        // Algoritme-plasseringer (simulert)
         const setup1 = [
             {id:'L', x:1, y:1}, {id:'L', x:21, y:1}, {id:'M', x:41, y:1}, {id:'M', x:51, y:1}
         ];
@@ -182,7 +215,7 @@
         let currentTotal = 0;
         let summary = {};
 
-        placements.forEach(p => {
+        placements.forEach((p, index) => {
             const box = inventory[p.id];
             currentTotal += box.p;
             summary[box.n] = (summary[box.n] || 0) + 1;
@@ -191,6 +224,7 @@
             el.className = 'box-unit';
             el.style.gridColumn = `${p.x} / span ${box.w}`;
             el.style.gridRow = `${p.y} / span ${box.d}`;
+            el.style.animationDelay = (index * 0.05) + 's'; // Staggered animasjon
             el.innerText = `${box.w}x${box.d}`;
             draw.appendChild(el);
         });
@@ -211,9 +245,18 @@
         const isChecked = document.getElementById('addon' + num).checked;
         const priceEl = document.getElementById('p' + num);
         const base = (num === 1) ? basePrice1 : basePrice2;
-        
-        const finalPrice = isChecked ? (base + ADDOON_PRICE) : base;
+        const finalPrice = isChecked ? (base + ADDON_PRICE) : base;
         priceEl.innerText = finalPrice + ',-';
+    }
+
+    function addToCart(num) {
+        const itemsInSetup = (num === 1) ? 4 : 11;
+        cartCount += itemsInSetup;
+        document.getElementById('cart-nav').innerText = `🛒 Handlekurv (${cartCount})`;
+        
+        const note = document.getElementById('notification');
+        note.style.display = 'block';
+        setTimeout(() => { note.style.display = 'none'; }, 3000);
     }
 </script>
 </body>
