@@ -18,9 +18,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; }
 
-        header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); sticky; top: 0; z-index: 100; }
-        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 52px; padding: 0 20px; }
-        .logo { font-weight: 600; font-size: 18px; text-decoration: none; color: var(--apple-text); }
+        header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; padding: 0 20px; }
+        
+        /* LOGO JUSTERING */
+        .logo-link { display: flex; align-items: center; text-decoration: none; height: 100%; }
+        .logo-link img { 
+            height: 50px; /* Gjort logoen større */
+            width: auto; 
+            display: block;
+            object-fit: contain;
+        }
 
         main { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
 
@@ -33,10 +41,9 @@
         .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .card { background: white; border-radius: 24px; padding: 25px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
 
-        /* DENNE DELEN FIXER VISUALISERINGEN */
         .drawer-container {
             background: var(--drawer-wood);
-            padding: 10px; /* "Tykkelsen" på skuffen */
+            padding: 10px;
             border-radius: 8px;
             margin-bottom: 20px;
             width: 100%;
@@ -47,8 +54,7 @@
             background: var(--drawer-inside);
             display: grid;
             position: relative;
-            /* Grid-størrelsen settes dynamisk i JS */
-            gap: 2px; /* Luft mellom boksene */
+            gap: 2px;
             width: 100%;
         }
 
@@ -74,7 +80,9 @@
 
 <header>
     <div class="nav-container">
-        <a href="#" class="logo"><img src="logo.png" style="height:24px; margin-right:10px;"> ryddigst.no</a>
+        <a href="index.html" class="logo-link">
+            <img src="logo.png" alt="ryddigst.no">
+        </a>
     </div>
 </header>
 
@@ -117,12 +125,10 @@
         const D = parseInt(document.getElementById('D').value);
         document.getElementById('res').style.display = 'grid';
 
-        // Oppsett 1: Minimalistisk (Lange bokser)
         render('draw1', 'list1', 'p1', W, D, [
             {id:'L', x:1, y:1}, {id:'L', x:21, y:1}, {id:'M', x:41, y:1}, {id:'M', x:51, y:1}
         ]);
 
-        // Oppsett 2: Maks kapasitet (Mindre bokser)
         render('draw2', 'list2', 'p2', W, D, [
             {id:'S', x:1, y:1}, {id:'S', x:11, y:1}, {id:'S', x:21, y:1}, {id:'S', x:31, y:1}, {id:'S', x:41, y:1}, {id:'S', x:51, y:1},
             {id:'S', x:1, y:11}, {id:'S', x:11, y:11}, {id:'M', x:21, y:11}, {id:'M', x:31, y:11}, {id:'M', x:41, y:11}
@@ -136,10 +142,8 @@
         
         draw.innerHTML = ''; list.innerHTML = '';
         
-        // CSS Grid-magi: Hver kolonne/rad er nøyaktig 1cm
         draw.style.gridTemplateColumns = `repeat(${W}, 1fr)`;
         draw.style.gridTemplateRows = `repeat(${D}, 1fr)`;
-        // For å holde proporsjonene riktige i nettleseren:
         draw.style.aspectRatio = `${W} / ${D}`;
 
         let total = 0;
@@ -152,7 +156,6 @@
 
             const el = document.createElement('div');
             el.className = 'box-unit';
-            // Plassering i gridet: start / span
             el.style.gridColumn = `${p.x} / span ${box.w}`;
             el.style.gridRow = `${p.y} / span ${box.d}`;
             el.innerText = `${box.w}x${box.d}`;
@@ -165,7 +168,6 @@
         price.innerText = total + ',-';
     }
     
-    // Kjør ved start
     generate();
 </script>
 </body>
