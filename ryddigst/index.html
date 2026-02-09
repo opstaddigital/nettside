@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Profesjonell Skuffeplanlegger</title>
+    <title>Ryddigst.no - Presisjonsvisning</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,7 +19,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* HEADER */
         header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px; }
         .logo-link img { height: 60px; width: auto; display: block; object-fit: contain; }
@@ -27,63 +26,53 @@
 
         main { max-width: 1100px; margin: 0 auto; padding: 40px 20px; flex: 1; width: 100%; }
 
-        /* HERO / LANDING */
-        #landing-content { text-align: center; padding: 60px 0; max-width: 800px; margin: 0 auto; transition: opacity 0.4s ease; }
-        #landing-content.hidden { opacity: 0; pointer-events: none; height: 0; padding: 0; overflow: hidden; }
-        .hero h1 { font-size: 52px; font-weight: 600; letter-spacing: -2px; margin-bottom: 24px; line-height: 1.1; }
-        .hero p { font-size: 20px; color: var(--apple-secondary); line-height: 1.5; margin-bottom: 40px; }
+        #landing-content { text-align: center; padding: 60px 0; max-width: 800px; margin: 0 auto; transition: opacity 0.4s ease, transform 0.4s ease; }
+        #landing-content.hidden { opacity: 0; transform: translateY(-20px); pointer-events: none; height: 0; padding: 0; overflow: hidden; }
+        .hero h1 { font-size: 56px; font-weight: 600; letter-spacing: -2px; margin-bottom: 24px; line-height: 1.1; }
+        .hero p { font-size: 22px; color: var(--apple-secondary); line-height: 1.5; }
 
-        /* INPUT BOX */
-        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; margin-bottom: 40px; text-align: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); }
+        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; margin-bottom: 40px; text-align: center; position: relative; z-index: 10; }
         .input-group { display: flex; gap: 24px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
         .input-item { display: flex; flex-direction: column; text-align: left; }
         .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 8px; text-transform: uppercase; }
-        .input-item input { padding: 14px; border-radius: 14px; border: 1px solid #d2d2d7; width: 130px; font-size: 18px; outline: none; transition: border-color 0.2s; }
-        .input-item input:focus { border-color: var(--apple-blue); }
+        .input-item input { padding: 14px; border-radius: 14px; border: 1px solid #d2d2d7; width: 140px; font-size: 18px; outline: none; }
 
-        /* RESULTS */
         .results-grid { display: none; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; opacity: 0; transition: opacity 0.5s ease; }
         .results-grid.visible { display: grid; opacity: 1; }
         .card { background: white; border-radius: 28px; padding: 35px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
 
-        /* VISUALISERING */
-        .drawer-container { background: var(--drawer-wood); padding: 14px; border-radius: 16px; margin-bottom: 30px; width: 100%; overflow: hidden; box-shadow: inset 0 4px 10px rgba(0,0,0,0.08); }
-        .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 2px; width: 100%; border-radius: 4px; }
+        .drawer-container { background: var(--drawer-wood); padding: 14px; border-radius: 14px; margin-bottom: 30px; width: 100%; }
+        .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 3px; width: 100%; border-radius: 4px; }
         
+        @keyframes boxIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .box-unit { 
-            background: rgba(255, 255, 255, 0.94); 
+            background: rgba(255, 255, 255, 0.92); 
             border: 1px solid rgba(0,0,0,0.08); 
             border-radius: 6px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            font-size: 9px; 
+            font-size: 10px; 
             color: var(--apple-secondary); 
             font-weight: 600; 
             opacity: 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .box-unit.animate { animation: boxPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes boxPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .box-unit.animate { animation: boxIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* ADDON */
         .addon-box { background: var(--apple-gray); padding: 18px; border-radius: 16px; margin: 25px 0; display: flex; align-items: center; cursor: pointer; user-select: none; }
         .addon-box input { margin-right: 15px; width: 20px; height: 20px; accent-color: var(--apple-text); pointer-events: none; }
         .addon-box label { cursor: pointer; font-size: 15px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; pointer-events: none; }
 
-        /* LIST & BUTTONS */
         .list { list-style: none; margin: 25px 0; border-top: 1px solid #eee; flex-grow: 1; }
-        .list li { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; border-bottom: 1px solid #f5f5f7; }
-        .total { font-size: 28px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 15px; margin-top: auto; }
+        .list li { display: flex; justify-content: space-between; padding: 12px 0; font-size: 15px; border-bottom: 1px solid #f5f5f7; }
+        .total { font-size: 28px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 20px; margin-top: auto; }
         
-        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 18px; border-radius: 16px; font-weight: 600; margin-top: 24px; cursor: pointer; font-size: 17px; transition: transform 0.2s; }
-        .btn:hover { transform: scale(1.01); }
-        .btn-main { width: auto; margin: 0; padding: 14px 40px; }
-
+        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 18px; border-radius: 16px; font-weight: 600; margin-top: 24px; cursor: pointer; font-size: 17px; }
         #notification { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--apple-text); color: white; padding: 16px 32px; border-radius: 50px; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
-        footer { background: var(--apple-gray); padding: 60px 20px; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 100px; text-align: center; }
-        .footer-container { max-width: 1100px; margin: 0 auto; color: var(--apple-secondary); font-size: 14px; }
+        footer { background: var(--apple-gray); padding: 40px 20px; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 60px; }
+        .footer-container { max-width: 1100px; margin: 0 auto; color: var(--apple-secondary); font-size: 14px; text-align: center; }
     </style>
 </head>
 <body>
@@ -99,21 +88,21 @@
 
 <main>
     <div id="landing-content" class="hero">
-        <h1>Millimeterpresisjon.</h1>
-        <p>Vår algoritme bruker spesialiserte moduler for å fylle skuffer med ukurante mål – helt uten dødplass.</p>
+        <h1>Perfekt orden.<br>Hver eneste gang.</h1>
+        <p>Vår algoritme pusler sammen dine skreddersydde moduler for 100% utnyttelse.</p>
     </div>
 
     <div class="calc-box">
         <div class="input-group">
             <div class="input-item"><label>Bredde (cm)</label><input type="number" id="W" value="60"></div>
             <div class="input-item"><label>Dybde (cm)</label><input type="number" id="D" value="50"></div>
-            <button class="btn btn-main" onclick="generate()">Beregn min skuff</button>
+            <button class="btn" style="width: auto; margin: 0; padding: 14px 40px;" onclick="generate()">Beregn min skuff</button>
         </div>
     </div>
 
-    <div class="results-grid" id="res">
+    <div id="res" class="results-grid">
         <div class="card">
-            <h3>Alt. 1: Bestseller-miks</h3>
+            <h3>Alt. 1: Bestseller-fyll</h3>
             <div class="drawer-container"><div id="draw1" class="drawer-inner"></div></div>
             <ul id="list1" class="list"></ul>
             <div class="addon-box" onclick="toggleAddon(1)">
@@ -125,7 +114,7 @@
         </div>
 
         <div class="card">
-            <h3>Alt. 2: Maks matematisk dekning</h3>
+            <h3>Alt. 2: Maksimal presisjon</h3>
             <div class="drawer-container"><div id="draw2" class="drawer-inner"></div></div>
             <ul id="list2" class="list"></ul>
             <div class="addon-box" onclick="toggleAddon(2)">
@@ -142,87 +131,90 @@
 
 <footer>
     <div class="footer-container">
-        <div>© 2026 Ryddigst.no. Utviklet av Opstad Digital.</div>
+        <div>© 2026 Ryddigst.no. En del av Opstad Digital.</div>
     </div>
 </footer>
 
 <script>
-    // DIN SPESIFIKKE PRODUKTKATALOG
     const inventory = [
-        { sku: 4, w: 10, d: 15, p: 79, n: 'Premium Bestseller (10x15)' },
-        { sku: 1, w: 10, d: 10, p: 59, n: 'Premium Anker (10x10)' },
-        { sku: 8, w: 12, d: 15, p: 99, n: 'Premium Anker (12x15)' },
-        { sku: 9, w: 13, d: 15, p: 109, n: 'Premium Volum (13x15)' },
-        { sku: 6, w: 12, d: 13, p: 89, n: 'Premium Justering (12x13)' },
-        { sku: 2, w: 10, d: 13, p: 79, n: 'Premium Justering (10x13)' },
-        { sku: 5, w: 11, d: 15, p: 89, n: 'Premium Spesial (11x15)' },
-        { sku: 3, w: 10, d: 14, p: 85, n: 'Premium Spesial (10x14)' },
-        { sku: 7, w: 11, d: 12, p: 79, n: 'Premium Spesial (11x12)' }
+        { sku: 4, w: 10, d: 15, p: 79, n: 'Bestseller (10x15)' },
+        { sku: 1, w: 10, d: 10, p: 59, n: 'Anker (10x10)' },
+        { sku: 8, w: 12, d: 15, p: 99, n: 'Anker (12x15)' },
+        { sku: 9, w: 13, d: 15, p: 109, n: 'Volum (13x15)' },
+        { sku: 6, w: 12, d: 13, p: 89, n: 'Justering (12x13)' },
+        { sku: 2, w: 10, d: 13, p: 79, n: 'Justering (10x13)' },
+        { sku: 5, w: 11, d: 15, p: 89, n: 'Spesial (11x15)' },
+        { sku: 3, w: 10, d: 14, p: 85, n: 'Spesial (10x14)' },
+        { sku: 7, w: 11, d: 12, p: 79, n: 'Spesial (11x12)' }
     ];
 
     const ADDON_PRICE = 79;
     let basePrice1 = 0, basePrice2 = 0, cartCount = 0;
 
     function generate() {
-        const landing = document.getElementById('landing-content');
-        landing.classList.add('hidden');
-        
-        const resGrid = document.getElementById('res');
-        resGrid.classList.add('visible');
+        const hero = document.getElementById('landing-content');
+        hero.classList.add('hidden');
+        setTimeout(() => {
+            hero.style.display = 'none';
+            document.getElementById('res').classList.add('visible');
+        }, 400);
 
         const W = parseInt(document.getElementById('W').value);
         const D = parseInt(document.getElementById('D').value);
 
-        // Algoritme-forslag 1: Prioriterer bestselgere
-        const setup1 = solveDrawer(W, D, [4, 1, 8, 9]);
-        // Algoritme-forslag 2: Bruker hele katalogen for full dekning
-        const setup2 = solveDrawer(W, D, [1, 2, 3, 5, 6, 7]);
-
-        basePrice1 = render('draw1', 'list1', W, D, setup1);
-        basePrice2 = render('draw2', 'list2', W, D, setup2);
+        // Algoritmen kjører for to ulike strategier
+        basePrice1 = render('draw1', 'list1', W, D, smartSolve(W, D, [10, 12, 13]));
+        basePrice2 = render('draw2', 'list2', W, D, smartSolve(W, D, [10, 11, 12, 13, 14]));
 
         setTimeout(() => {
             document.querySelectorAll('.box-unit').forEach(el => el.classList.add('animate'));
         }, 500);
-
         updateTotal(1); updateTotal(2);
     }
 
-    function solveDrawer(drawerW, drawerD, allowedSKUs) {
-        let placements = [];
-        let x = 1;
-        const available = inventory.filter(b => allowedSKUs.includes(b.sku));
-
-        while (x <= drawerW) {
-            let remW = drawerW - x + 1;
-            let bestW = 0;
-            
-            // Finn en bredde som passer
-            for(let b of available) {
-                if(b.w <= remW && b.w > bestW) bestW = b.w;
+    // NY SMART ALGORITME SOM FINNER KOMBINASJONER
+    function findBestCombo(target, availableSizes) {
+        let best = { sum: 0, items: [] };
+        // Enkel sjekk for kombinasjoner av opptil 6 elementer
+        function search(currentSum, currentItems) {
+            if (currentSum > target) return;
+            if (currentSum > best.sum) {
+                best = { sum: currentSum, items: [...currentItems] };
             }
-            if(bestW === 0) break;
+            if (currentSum === target) return;
+            if (currentItems.length > 6) return;
 
-            let y = 1;
-            while (y <= drawerD) {
-                let remD = drawerD - y + 1;
-                let bestBox = null;
-                
-                for(let b of available) {
-                    if(b.w === bestW && b.d <= remD) {
-                        if(!bestBox || b.d > bestBox.d) bestBox = b;
-                    }
-                }
-
-                if(bestBox) {
-                    placements.push({ sku: bestBox.sku, x: x, y: y });
-                    y += bestBox.d;
-                } else {
-                    y++;
-                }
+            for (let s of availableSizes) {
+                search(currentSum + s, [...currentItems, s]);
+                if (best.sum === target) return;
             }
-            x += bestW;
         }
+        search(0, []);
+        return best.items;
+    }
+
+    function smartSolve(drawerW, drawerD, allowedWidths) {
+        const widthCombo = findBestCombo(drawerW, allowedWidths);
+        const allowedDepths = [10, 12, 13, 14, 15];
+        const depthCombo = findBestCombo(drawerD, allowedDepths);
+        
+        let placements = [];
+        let currentX = 1;
+
+        widthCombo.forEach(w => {
+            let currentY = 1;
+            depthCombo.forEach(d => {
+                const box = inventory.find(b => b.w === w && b.d === d) || 
+                            inventory.find(b => b.w === d && b.d === w) || // Prøv å rotere
+                            inventory.sort((a,b) => (b.w*b.d) - (a.w*a.d)).find(b => b.w <= w && b.d <= d);
+                
+                if (box) {
+                    placements.push({ sku: box.sku, x: currentX, y: currentY, displayW: w, displayD: d });
+                }
+                currentY += d;
+            });
+            currentX += w;
+        });
         return placements;
     }
 
@@ -234,26 +226,26 @@
         draw.style.gridTemplateRows = `repeat(${D}, 1fr)`;
         draw.style.aspectRatio = `${W} / ${D}`;
 
-        let currentTotal = 0, summary = {};
+        let total = 0, summary = {};
         placements.forEach((p, index) => {
             const b = inventory.find(x => x.sku === p.sku);
-            currentTotal += b.p;
+            total += b.p;
             summary[b.n] = (summary[b.n] || 0) + 1;
 
             const el = document.createElement('div');
             el.className = 'box-unit';
-            el.style.gridColumn = `${p.x} / span ${b.w}`;
-            el.style.gridRow = `${p.y} / span ${b.d}`;
-            el.style.animationDelay = (index * 0.02) + 's';
-            el.innerText = `${b.w}x${b.d}`;
+            el.style.gridColumn = `${p.x} / span ${p.displayW}`;
+            el.style.gridRow = `${p.y} / span ${p.displayD}`;
+            el.style.animationDelay = (index * 0.03) + 's';
+            el.innerText = `${p.displayW}x${p.displayD}`;
             draw.appendChild(el);
         });
 
         for (let n in summary) {
-            const prod = inventory.find(x => x.n === n);
-            list.innerHTML += `<li><span>${summary[n]}x ${n}</span> <span>${summary[n]*prod.p},-</span></li>`;
+            const price = inventory.find(x => x.n === n).p;
+            list.innerHTML += `<li><span>${summary[n]}x ${n}</span> <span>${summary[n]*price},-</span></li>`;
         }
-        return currentTotal;
+        return total;
     }
 
     function toggleAddon(num) {
@@ -264,8 +256,9 @@
 
     function updateTotal(num) {
         const isChecked = document.getElementById('addon' + num).checked;
+        const priceEl = document.getElementById('p' + num);
         const base = (num === 1) ? basePrice1 : basePrice2;
-        document.getElementById('p' + num).innerText = (isChecked ? base + ADDON_PRICE : base) + ',-';
+        priceEl.innerText = (isChecked ? base + ADDON_PRICE : base) + ',-';
     }
 
     function addToCart(num) {
