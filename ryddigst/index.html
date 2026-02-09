@@ -3,185 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Skuffekalkulator</title>
+    <title>Ryddigst.no - Skreddersydd Organisering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-bg-main: #ffffff;
-            --color-bg-secondary: #f5f5f7;
-            --color-text-main: #1d1d1f;
-            --color-text-secondary: #86868b;
-            --color-accent: #0071e3;
-            --color-button: #1d1d1f;
-            --color-border: #d2d2d7;
-            --font-stack: 'Inter', sans-serif;
-            --page-width: 1100px;
+            --apple-bg: #ffffff;
+            --apple-gray: #f5f5f7;
+            --apple-text: #1d1d1f;
+            --apple-secondary: #86868b;
+            --apple-blue: #0071e3;
+            --border-radius: 18px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-stack); background-color: var(--color-bg-main); color: var(--color-text-main); -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
 
-        header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; max-width: var(--page-width); margin: 0 auto; }
-        .logo { display: flex; align-items: center; font-weight: 600; font-size: 1.2rem; text-decoration: none; color: var(--color-text-main); }
-        .logo img { height: 32px; margin-right: 12px; }
+        /* NAVIGASJON */
+        header { position: sticky; top: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .nav-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 52px; padding: 0 20px; }
+        .logo { font-weight: 600; font-size: 18px; text-decoration: none; color: var(--apple-text); letter-spacing: -0.5px; }
+        nav a { text-decoration: none; color: var(--apple-text); font-size: 12px; margin-left: 24px; opacity: 0.8; }
 
-        main { max-width: var(--page-width); margin: 2rem auto; padding: 0 2rem; }
+        /* HERO SEKSJON */
+        .hero { text-align: center; padding: 80px 20px 40px; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 48px; font-weight: 600; letter-spacing: -1.5px; margin-bottom: 10px; }
+        .hero p { font-size: 21px; color: var(--apple-secondary); font-weight: 400; }
 
-        /* INPUT SEKSJON */
-        .calc-container { background: var(--color-bg-secondary); padding: 3rem; border-radius: 28px; margin-bottom: 2rem; }
-        .input-row { display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap; }
-        .input-field { flex: 1; min-width: 150px; }
-        .input-field label { display: block; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--color-text-secondary); font-weight: 500; }
-        .input-field input { width: 100%; padding: 0.8rem; border: 1px solid var(--color-border); border-radius: 12px; font-size: 1rem; }
-        .btn-calc { background: var(--color-button); color: white; border: none; padding: 0.9rem 2.5rem; border-radius: 12px; cursor: pointer; font-weight: 600; }
+        /* KALKULATOR MODUL */
+        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; max-width: 900px; margin: 0 auto 60px; }
+        .input-group { display: flex; gap: 20px; justify-content: center; align-items: flex-end; margin-bottom: 30px; }
+        .input-item { display: flex; flex-direction: column; text-align: left; }
+        .input-item label { font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--apple-secondary); text-transform: uppercase; }
+        .input-item input { padding: 12px 16px; border-radius: 12px; border: 1px solid #d2d2d7; font-size: 16px; width: 140px; outline: none; }
+        .btn-main { background: var(--apple-text); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 500; cursor: pointer; transition: 0.2s; }
+        .btn-main:hover { opacity: 0.9; transform: scale(0.98); }
 
         /* RESULTATER */
-        #results-area { display: none; margin-top: 3rem; }
-        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-        .proposal-card { border: 1px solid var(--color-border); padding: 2rem; border-radius: 24px; display: flex; flex-direction: column; }
+        #results { display: none; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 0 auto 100px; padding: 0 20px; }
+        .card { background: white; border-radius: 24px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.05); }
+        .card h3 { font-size: 20px; margin-bottom: 20px; }
 
-        /* SKUFFE-VISUALISERING (HTML-BASERT) */
-        .drawer-preview { 
+        /* VISUALISERING AV SKUFFE */
+        .drawer-canvas { 
             background: #e5e5e5; 
-            border: 8px solid #d1d1d1; 
-            border-radius: 8px; 
-            margin: 1.5rem 0; 
+            border: 10px solid #d1d1d1; 
+            border-radius: 12px; 
             position: relative; 
-            overflow: hidden;
-            display: grid;
-            gap: 2px;
-            padding: 2px;
-            /* Høyde justeres dynamisk i JS */
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 4px;
+            gap: 4px;
+            min-height: 300px;
         }
-        .box-unit { 
-            background: rgba(255, 255, 255, 0.8); 
+        .box-render { 
+            background: rgba(255,255,255,0.7); 
             border: 1px solid rgba(0,0,0,0.1); 
-            backdrop-filter: blur(4px);
-            border-radius: 4px;
+            backdrop-filter: blur(5px);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 10px;
-            color: rgba(0,0,0,0.4);
+            color: #888;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
         }
 
-        .product-list { list-style: none; margin: 1.5rem 0; flex-grow: 1; }
-        .product-list li { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .list { list-style: none; margin-bottom: 25px; flex-grow: 1; }
+        .list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f7; font-size: 14px; }
+        .total { font-size: 20px; font-weight: 600; border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px; display: flex; justify-content: space-between; }
         
-        .total-row { display: flex; justify-content: space-between; font-weight: 600; font-size: 1.2rem; margin: 1rem 0; padding-top: 1rem; border-top: 2px solid var(--color-text-main); }
-        .btn-buy { width: 100%; padding: 1rem; border-radius: 12px; border: none; background: var(--color-button); color: white; font-weight: 600; cursor: pointer; }
-
-        footer { text-align: center; padding: 4rem; color: var(--color-text-secondary); font-size: 0.8rem; }
+        /* FOOTER */
+        footer { background: var(--apple-gray); padding: 60px 20px; border-top: 1px solid #e5e5e5; }
+        .footer-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; color: var(--apple-secondary); font-size: 12px; }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="/" class="logo">
-        <img src="logo.png" alt="" onerror="this.style.display='none'">
-        ryddigst.no
-    </a>
+    <div class="nav-container">
+        <a href="#" class="logo">ryddigst.no</a>
+        <nav>
+            <a href="#">Produkter</a>
+            <a href="#">Om oss</a>
+            <a href="#">Kontakt</a>
+        </nav>
+    </div>
 </header>
 
+<div class="hero">
+    <h1>Presisjon i hver skuff.</h1>
+    <p>Skreddersydd organisering, beregnet på sekunder.</p>
+</div>
+
 <main>
-    <section class="calc-container">
-        <h2 style="margin-bottom: 1.5rem;">Skuffekalkulator</h2>
-        <div class="input-row">
-            <div class="input-field">
+    <section class="calc-box">
+        <div class="input-group">
+            <div class="input-item">
                 <label>Bredde (cm)</label>
-                <input type="number" id="width" value="60">
+                <input type="number" id="wInp" value="60">
             </div>
-            <div class="input-field">
+            <div class="input-item">
                 <label>Dybde (cm)</label>
-                <input type="number" id="depth" value="50">
+                <input type="number" id="dInp" value="50">
             </div>
-            <button class="btn-calc" onclick="renderResults()">Oppdater forslag</button>
+            <button class="btn-main" onclick="calculate()">Beregn forslag</button>
         </div>
     </section>
 
-    <div id="results-area">
-        <div class="results-grid">
-            <div class="proposal-card">
-                <h3 id="title-1">Færrest bokser</h3>
-                <div id="visual-1" class="drawer-preview"></div>
-                <ul class="product-list" id="list-1"></ul>
-                <div class="total-row"><span>Total:</span><span id="price-1">0,-</span></div>
-                <button class="btn-buy">Legg i kurv</button>
-            </div>
-
-            <div class="proposal-card">
-                <h3 id="title-2">Mest variasjon</h3>
-                <div id="visual-2" class="drawer-preview"></div>
-                <ul class="product-list" id="list-2"></ul>
-                <div class="total-row"><span>Total:</span><span id="price-2">0,-</span></div>
-                <button class="btn-buy">Legg i kurv</button>
-            </div>
+    <div id="results" style="display: none;">
+        <div class="card">
+            <h3>Alternativ 1: Minimalistisk</h3>
+            <div id="vis1" class="drawer-canvas"></div>
+            <ul id="list1" class="list"></ul>
+            <div class="total"><span>Totalpris</span><span id="p1">0,-</span></div>
+            <button class="btn-main" style="margin-top:20px">Legg i handlekurv</button>
+        </div>
+        <div class="card">
+            <h3>Alternativ 2: Maks kapasitet</h3>
+            <div id="vis2" class="drawer-canvas"></div>
+            <ul id="list2" class="list"></ul>
+            <div class="total"><span>Totalpris</span><span id="p2">0,-</span></div>
+            <button class="btn-main" style="margin-top:20px">Legg i handlekurv</button>
         </div>
     </div>
 </main>
 
-<footer>© 2026 Ryddigst.no - En del av Opstad Digital</footer>
+<footer>
+    <div class="footer-content">
+        <div>© 2026 Ryddigst.no. Alle rettigheter reservert.</div>
+        <div>En del av Opstad Digital</div>
+    </div>
+</footer>
 
 <script>
-    // Konfigurasjon av boks-typer og priser
-    const bokstyper = {
-        S: { w: 10, d: 10, pris: 49, navn: "Kvadrat Small" },
-        M: { w: 10, d: 20, pris: 79, navn: "Rektangel Medium" },
-        L: { w: 20, d: 30, pris: 129, navn: "Rektangel Large" }
-    };
+    // Boks-typer: w=bredde, d=dybde, p=pris
+    const inventory = [
+        { id: 'L', w: 20, d: 30, p: 149, n: 'Premium Large' },
+        { id: 'M', w: 10, d: 20, p: 89, n: 'Premium Medium' },
+        { id: 'S', w: 10, d: 10, p: 59, n: 'Premium Small' }
+    ];
 
-    function renderResults() {
-        const w = document.getElementById('width').value;
-        const d = document.getElementById('depth').value;
-        document.getElementById('results-area').style.display = 'block';
+    function calculate() {
+        const w = document.getElementById('wInp').value;
+        const d = document.getElementById('dInp').value;
+        document.getElementById('results').style.display = 'grid';
 
-        // Tegn visuelt og generer lister
-        drawDrawer('visual-1', 'list-1', 'price-1', w, d, 'minimal');
-        drawDrawer('visual-2', 'list-2', 'price-2', w, d, 'varied');
+        renderOption('vis1', 'list1', 'p1', w, d, [ {id:'L', q:2}, {id:'M', q:2} ]);
+        renderOption('vis2', 'list2', 'p2', w, d, [ {id:'S', q:8}, {id:'M', q:3} ]);
     }
 
-    function drawDrawer(containerId, listId, priceId, w, d, mode) {
-        const container = document.getElementById(containerId);
+    function renderOption(visId, listId, priceId, w, d, setup) {
+        const vis = document.getElementById(visId);
         const list = document.getElementById(listId);
         const price = document.getElementById(priceId);
         
-        container.innerHTML = '';
-        list.innerHTML = '';
-        
-        // Juster skala for visning
-        container.style.height = (d * 5) + "px";
-        container.style.gridTemplateColumns = `repeat(auto-fill, minmax(50px, 1fr))`;
-
+        vis.innerHTML = ''; list.innerHTML = '';
         let total = 0;
-        let items = [];
 
-        if(mode === 'minimal') {
-            // "Simulert" algoritme for færrest bokser
-            items = [ {t: 'L', q: 2}, {t: 'M', q: 2} ];
-        } else {
-            // "Simulert" algoritme for variasjon
-            items = [ {t: 'S', q: 6}, {t: 'M', q: 4} ];
-        }
-
-        items.forEach(item => {
-            const data = bokstyper[item.t];
-            total += (data.pris * item.q);
+        setup.forEach(item => {
+            const data = inventory.find(x => x.id === item.id);
+            total += (data.p * item.q);
+            list.innerHTML += `<li><span>${item.q}x ${data.n}</span> <span>${data.p * item.q},-</span></li>`;
             
-            // Legg til i liste
-            list.innerHTML += `<li><span>${item.q}x ${data.navn}</span> <span>${data.pris * item.q},-</span></li>`;
-            
-            // Tegn bokser i "skuffen"
-            for(let i=0; i < item.q; i++) {
-                const box = document.createElement('div');
-                box.className = 'box-unit';
-                box.style.gridColumn = `span ${Math.floor(data.w / 5)}`;
-                box.style.height = (data.d * 4) + "px";
-                box.innerText = `${data.w}x${data.d}`;
-                container.appendChild(box);
+            for(let i=0; i<item.q; i++) {
+                const b = document.createElement('div');
+                b.className = 'box-render';
+                b.style.width = `calc(${(data.w/w)*100}% - 4px)`;
+                b.style.height = `${data.d * 4}px`;
+                b.innerText = `${data.w}x${data.d}`;
+                vis.appendChild(b);
             }
         });
-
-        price.innerText = total + ",-";
+        price.innerText = total + ',-';
     }
 </script>
 </body>
