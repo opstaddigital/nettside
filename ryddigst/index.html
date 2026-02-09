@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Skreddersydd Organisering</title>
+    <title>Ryddigst.no - Presisjonsvisning</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,173 +11,162 @@
             --apple-gray: #f5f5f7;
             --apple-text: #1d1d1f;
             --apple-secondary: #86868b;
-            --apple-blue: #0071e3;
-            --border-radius: 18px;
+            --drawer-wood: #d1d1d1;
+            --drawer-inside: #e5e5e5;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; }
 
-        /* NAVIGASJON */
-        header { position: sticky; top: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .nav-container { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 52px; padding: 0 20px; }
-        .logo { font-weight: 600; font-size: 18px; text-decoration: none; color: var(--apple-text); letter-spacing: -0.5px; }
-        nav a { text-decoration: none; color: var(--apple-text); font-size: 12px; margin-left: 24px; opacity: 0.8; }
+        header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 52px; padding: 0 20px; }
+        .logo { font-weight: 600; font-size: 18px; text-decoration: none; color: var(--apple-text); }
 
-        /* HERO SEKSJON */
-        .hero { text-align: center; padding: 80px 20px 40px; max-width: 800px; margin: 0 auto; }
-        .hero h1 { font-size: 48px; font-weight: 600; letter-spacing: -1.5px; margin-bottom: 10px; }
-        .hero p { font-size: 21px; color: var(--apple-secondary); font-weight: 400; }
+        main { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
 
-        /* KALKULATOR MODUL */
-        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; max-width: 900px; margin: 0 auto 60px; }
-        .input-group { display: flex; gap: 20px; justify-content: center; align-items: flex-end; margin-bottom: 30px; }
+        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 30px; margin-bottom: 40px; text-align: center; }
+        .input-group { display: flex; gap: 20px; justify-content: center; align-items: flex-end; }
         .input-item { display: flex; flex-direction: column; text-align: left; }
-        .input-item label { font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--apple-secondary); text-transform: uppercase; }
-        .input-item input { padding: 12px 16px; border-radius: 12px; border: 1px solid #d2d2d7; font-size: 16px; width: 140px; outline: none; }
-        .btn-main { background: var(--apple-text); color: white; border: none; padding: 12px 30px; border-radius: 12px; font-weight: 500; cursor: pointer; transition: 0.2s; }
-        .btn-main:hover { opacity: 0.9; transform: scale(0.98); }
+        .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 5px; }
+        .input-item input { padding: 10px; border-radius: 10px; border: 1px solid #d2d2d7; width: 100px; }
 
-        /* RESULTATER */
-        #results { display: none; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 0 auto 100px; padding: 0 20px; }
-        .card { background: white; border-radius: 24px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.05); }
-        .card h3 { font-size: 20px; margin-bottom: 20px; }
+        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .card { background: white; border-radius: 24px; padding: 25px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
 
-        /* VISUALISERING AV SKUFFE */
-        .drawer-canvas { 
-            background: #e5e5e5; 
-            border: 10px solid #d1d1d1; 
-            border-radius: 12px; 
-            position: relative; 
-            margin-bottom: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            padding: 4px;
-            gap: 4px;
-            min-height: 300px;
+        /* DENNE DELEN FIXER VISUALISERINGEN */
+        .drawer-container {
+            background: var(--drawer-wood);
+            padding: 10px; /* "Tykkelsen" på skuffen */
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow: hidden;
         }
-        .box-render { 
-            background: rgba(255,255,255,0.7); 
-            border: 1px solid rgba(0,0,0,0.1); 
-            backdrop-filter: blur(5px);
-            border-radius: 6px;
+
+        .drawer-inner {
+            background: var(--drawer-inside);
+            display: grid;
+            position: relative;
+            /* Grid-størrelsen settes dynamisk i JS */
+            gap: 2px; /* Luft mellom boksene */
+            width: 100%;
+        }
+
+        .box-unit {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            color: #888;
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+            font-size: 9px;
+            color: var(--apple-secondary);
+            font-weight: 500;
         }
 
-        .list { list-style: none; margin-bottom: 25px; flex-grow: 1; }
-        .list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f7; font-size: 14px; }
-        .total { font-size: 20px; font-weight: 600; border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px; display: flex; justify-content: space-between; }
-        
-        /* FOOTER */
-        footer { background: var(--apple-gray); padding: 60px 20px; border-top: 1px solid #e5e5e5; }
-        .footer-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; color: var(--apple-secondary); font-size: 12px; }
+        .list { list-style: none; margin: 20px 0; border-top: 1px solid #eee; }
+        .list li { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; border-bottom: 1px solid #f5f5f7; }
+        .total { font-size: 22px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 10px; }
+        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 600; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="nav-container">
-        <a href="#" class="logo">ryddigst.no</a>
-        <nav>
-            <a href="#">Produkter</a>
-            <a href="#">Om oss</a>
-            <a href="#">Kontakt</a>
-        </nav>
+        <a href="#" class="logo"><img src="logo.png" style="height:24px; margin-right:10px;"> ryddigst.no</a>
     </div>
 </header>
 
-<div class="hero">
-    <h1>Presisjon i hver skuff.</h1>
-    <p>Skreddersydd organisering, beregnet på sekunder.</p>
-</div>
-
 <main>
-    <section class="calc-box">
+    <div class="calc-box">
         <div class="input-group">
-            <div class="input-item">
-                <label>Bredde (cm)</label>
-                <input type="number" id="wInp" value="60">
-            </div>
-            <div class="input-item">
-                <label>Dybde (cm)</label>
-                <input type="number" id="dInp" value="50">
-            </div>
-            <button class="btn-main" onclick="calculate()">Beregn forslag</button>
+            <div class="input-item"><label>Bredde (cm)</label><input type="number" id="W" value="60"></div>
+            <div class="input-item"><label>Dybde (cm)</label><input type="number" id="D" value="50"></div>
+            <button class="btn" style="width: auto; margin: 0;" onclick="generate()">Oppdater beregning</button>
         </div>
-    </section>
+    </div>
 
-    <div id="results" style="display: none;">
+    <div class="results-grid" id="res" style="display:none;">
         <div class="card">
             <h3>Alternativ 1: Minimalistisk</h3>
-            <div id="vis1" class="drawer-canvas"></div>
+            <div class="drawer-container"><div id="draw1" class="drawer-inner"></div></div>
             <ul id="list1" class="list"></ul>
-            <div class="total"><span>Totalpris</span><span id="p1">0,-</span></div>
-            <button class="btn-main" style="margin-top:20px">Legg i handlekurv</button>
+            <div class="total"><span>Total</span><span id="p1">0,-</span></div>
+            <button class="btn">Legg i handlekurv</button>
         </div>
         <div class="card">
             <h3>Alternativ 2: Maks kapasitet</h3>
-            <div id="vis2" class="drawer-canvas"></div>
+            <div class="drawer-container"><div id="draw2" class="drawer-inner"></div></div>
             <ul id="list2" class="list"></ul>
-            <div class="total"><span>Totalpris</span><span id="p2">0,-</span></div>
-            <button class="btn-main" style="margin-top:20px">Legg i handlekurv</button>
+            <div class="total"><span>Total</span><span id="p2">0,-</span></div>
+            <button class="btn">Legg i handlekurv</button>
         </div>
     </div>
 </main>
 
-<footer>
-    <div class="footer-content">
-        <div>© 2026 Ryddigst.no. Alle rettigheter reservert.</div>
-        <div>En del av Opstad Digital</div>
-    </div>
-</footer>
-
 <script>
-    // Boks-typer: w=bredde, d=dybde, p=pris
-    const inventory = [
-        { id: 'L', w: 20, d: 30, p: 149, n: 'Premium Large' },
-        { id: 'M', w: 10, d: 20, p: 89, n: 'Premium Medium' },
-        { id: 'S', w: 10, d: 10, p: 59, n: 'Premium Small' }
-    ];
+    const inventory = {
+        L: { w: 20, d: 30, p: 149, n: 'Premium Large' },
+        M: { w: 10, d: 20, p: 89, n: 'Premium Medium' },
+        S: { w: 10, d: 10, p: 59, n: 'Premium Small' }
+    };
 
-    function calculate() {
-        const w = document.getElementById('wInp').value;
-        const d = document.getElementById('dInp').value;
-        document.getElementById('results').style.display = 'grid';
+    function generate() {
+        const W = parseInt(document.getElementById('W').value);
+        const D = parseInt(document.getElementById('D').value);
+        document.getElementById('res').style.display = 'grid';
 
-        renderOption('vis1', 'list1', 'p1', w, d, [ {id:'L', q:2}, {id:'M', q:2} ]);
-        renderOption('vis2', 'list2', 'p2', w, d, [ {id:'S', q:8}, {id:'M', q:3} ]);
+        // Oppsett 1: Minimalistisk (Lange bokser)
+        render('draw1', 'list1', 'p1', W, D, [
+            {id:'L', x:1, y:1}, {id:'L', x:21, y:1}, {id:'M', x:41, y:1}, {id:'M', x:51, y:1}
+        ]);
+
+        // Oppsett 2: Maks kapasitet (Mindre bokser)
+        render('draw2', 'list2', 'p2', W, D, [
+            {id:'S', x:1, y:1}, {id:'S', x:11, y:1}, {id:'S', x:21, y:1}, {id:'S', x:31, y:1}, {id:'S', x:41, y:1}, {id:'S', x:51, y:1},
+            {id:'S', x:1, y:11}, {id:'S', x:11, y:11}, {id:'M', x:21, y:11}, {id:'M', x:31, y:11}, {id:'M', x:41, y:11}
+        ]);
     }
 
-    function renderOption(visId, listId, priceId, w, d, setup) {
-        const vis = document.getElementById(visId);
+    function render(drawId, listId, priceId, W, D, placements) {
+        const draw = document.getElementById(drawId);
         const list = document.getElementById(listId);
         const price = document.getElementById(priceId);
         
-        vis.innerHTML = ''; list.innerHTML = '';
-        let total = 0;
+        draw.innerHTML = ''; list.innerHTML = '';
+        
+        // CSS Grid-magi: Hver kolonne/rad er nøyaktig 1cm
+        draw.style.gridTemplateColumns = `repeat(${W}, 1fr)`;
+        draw.style.gridTemplateRows = `repeat(${D}, 1fr)`;
+        // For å holde proporsjonene riktige i nettleseren:
+        draw.style.aspectRatio = `${W} / ${D}`;
 
-        setup.forEach(item => {
-            const data = inventory.find(x => x.id === item.id);
-            total += (data.p * item.q);
-            list.innerHTML += `<li><span>${item.q}x ${data.n}</span> <span>${data.p * item.q},-</span></li>`;
-            
-            for(let i=0; i<item.q; i++) {
-                const b = document.createElement('div');
-                b.className = 'box-render';
-                b.style.width = `calc(${(data.w/w)*100}% - 4px)`;
-                b.style.height = `${data.d * 4}px`;
-                b.innerText = `${data.w}x${data.d}`;
-                vis.appendChild(b);
-            }
+        let total = 0;
+        let summary = {};
+
+        placements.forEach(p => {
+            const box = inventory[p.id];
+            total += box.p;
+            summary[box.n] = (summary[box.n] || 0) + 1;
+
+            const el = document.createElement('div');
+            el.className = 'box-unit';
+            // Plassering i gridet: start / span
+            el.style.gridColumn = `${p.x} / span ${box.w}`;
+            el.style.gridRow = `${p.y} / span ${box.d}`;
+            el.innerText = `${box.w}x${box.d}`;
+            draw.appendChild(el);
         });
+
+        for (let n in summary) {
+            list.innerHTML += `<li><span>${summary[n]}x ${n}</span> <span>${summary[n]*inventory[Object.keys(inventory).find(k=>inventory[k].n===n)].p},-</span></li>`;
+        }
         price.innerText = total + ',-';
     }
+    
+    // Kjør ved start
+    generate();
 </script>
 </body>
 </html>
