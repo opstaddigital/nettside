@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Skreddersydd Organisering</title>
+    <title>Ryddigst.no - Presisjonsvisning</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,33 +19,29 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* HEADER */
         header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px; }
         .logo-link img { height: 60px; width: auto; display: block; object-fit: contain; }
-        .nav-links { display: flex; align-items: center; gap: 30px; }
-        .nav-links a { text-decoration: none; color: var(--apple-text); font-size: 14px; font-weight: 500; }
         .cart-status { background: var(--apple-gray); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; }
 
         main { max-width: 1100px; margin: 0 auto; padding: 40px 20px; flex: 1; width: 100%; }
 
-        /* HERO / LANDING */
-        .hero { text-align: center; padding: 60px 0; max-width: 800px; margin: 0 auto; transition: opacity 0.5s ease; }
+        /* HERO SEKSJON - Med smooth transition */
+        #landing-content { text-align: center; padding: 60px 0; max-width: 800px; margin: 0 auto; transition: opacity 0.4s ease, transform 0.4s ease; }
+        #landing-content.hidden { opacity: 0; transform: translateY(-20px); pointer-events: none; }
         .hero h1 { font-size: 56px; font-weight: 600; letter-spacing: -2px; margin-bottom: 24px; line-height: 1.1; }
-        .hero p { font-size: 22px; color: var(--apple-secondary); line-height: 1.5; margin-bottom: 40px; }
+        .hero p { font-size: 22px; color: var(--apple-secondary); line-height: 1.5; }
 
-        /* INPUT SEKSJON */
-        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; margin-bottom: 40px; text-align: center; }
+        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; margin-bottom: 40px; text-align: center; position: relative; z-index: 10; }
         .input-group { display: flex; gap: 24px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
         .input-item { display: flex; flex-direction: column; text-align: left; }
         .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 8px; text-transform: uppercase; }
         .input-item input { padding: 14px; border-radius: 14px; border: 1px solid #d2d2d7; width: 140px; font-size: 18px; outline: none; }
 
-        /* RESULTATER */
-        .results-grid { display: none; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px; }
+        .results-grid { display: none; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; opacity: 0; transition: opacity 0.5s ease; }
+        .results-grid.visible { display: grid; opacity: 1; }
         .card { background: white; border-radius: 28px; padding: 35px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
 
-        /* VISUALISERING */
         .drawer-container { background: var(--drawer-wood); padding: 14px; border-radius: 14px; margin-bottom: 30px; width: 100%; }
         .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 3px; width: 100%; border-radius: 4px; }
         
@@ -63,14 +59,13 @@
             font-size: 11px; 
             color: var(--apple-secondary); 
             font-weight: 600; 
-            opacity: 0; /* Starter usynlig før animasjon */
+            opacity: 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .box-unit.animate { animation: boxIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* CHECKBOX MERKELAPPER */
-        .addon-box { background: var(--apple-gray); padding: 18px; border-radius: 16px; margin: 25px 0; display: flex; align-items: center; cursor: pointer; }
-        .addon-box input { pointer-events: none; margin-right: 15px; width: 20px; height: 20px; accent-color: var(--apple-text); }
+        .addon-box { background: var(--apple-gray); padding: 18px; border-radius: 16px; margin: 25px 0; display: flex; align-items: center; cursor: pointer; user-select: none; }
+        .addon-box input { margin-right: 15px; width: 20px; height: 20px; accent-color: var(--apple-text); pointer-events: none; }
         .addon-box label { cursor: pointer; font-size: 15px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; pointer-events: none; }
 
         .list { list-style: none; margin: 25px 0; border-top: 1px solid #eee; flex-grow: 1; }
@@ -80,8 +75,8 @@
         .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 18px; border-radius: 16px; font-weight: 600; margin-top: 24px; cursor: pointer; font-size: 17px; }
         #notification { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--apple-text); color: white; padding: 16px 32px; border-radius: 50px; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
-        footer { background: var(--apple-gray); padding: 60px 20px; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 100px; }
-        .footer-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; color: var(--apple-secondary); font-size: 14px; }
+        footer { background: var(--apple-gray); padding: 40px 20px; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 60px; }
+        .footer-container { max-width: 1100px; margin: 0 auto; color: var(--apple-secondary); font-size: 14px; text-align: center; }
     </style>
 </head>
 <body>
@@ -91,17 +86,14 @@
         <a href="index.html" class="logo-link">
             <img src="pnglogo.png" alt="ryddigst.no">
         </a>
-        <div class="nav-links">
-            <a href="#">Inspirasjon</a>
-            <div class="cart-status" id="cart-nav">🛒 Handlekurv (0)</div>
-        </div>
+        <div class="cart-status" id="cart-nav">🛒 Handlekurv (0)</div>
     </div>
 </header>
 
 <main>
     <div id="landing-content" class="hero">
         <h1>Perfekt orden.<br>Hver eneste gang.</h1>
-        <p>Tast inn målene dine, og se hvordan vi utnytter hver centimeter med våre krystallklare moduler.</p>
+        <p>Tast inn målene dine, og se hvordan vi utnytter hver centimeter.</p>
     </div>
 
     <div class="calc-box">
@@ -157,8 +149,22 @@
     let basePrice1 = 0, basePrice2 = 0, cartCount = 0;
 
     function generate() {
-        document.getElementById('landing-content').style.opacity = '0';
-        document.getElementById('res').style.display = 'grid';
+        // 1. Skjul landing-content med stil
+        const hero = document.getElementById('landing-content');
+        hero.classList.add('hidden');
+        
+        // Fjern den fra layouten etter animasjonen er ferdig (0.4s)
+        setTimeout(() => {
+            hero.style.display = 'none';
+            // 2. Vis resultatene
+            const resGrid = document.getElementById('res');
+            resGrid.classList.add('visible');
+
+            // 3. Start boks-animasjon
+            setTimeout(() => {
+                document.querySelectorAll('.box-unit').forEach(el => el.classList.add('animate'));
+            }, 100);
+        }, 400);
 
         const W = parseInt(document.getElementById('W').value);
         const D = parseInt(document.getElementById('D').value);
@@ -171,11 +177,6 @@
 
         basePrice1 = render('draw1', 'list1', W, D, setup1);
         basePrice2 = render('draw2', 'list2', W, D, setup2);
-
-        // Forsinket animasjon-start for boksene
-        setTimeout(() => {
-            document.querySelectorAll('.box-unit').forEach(el => el.classList.add('animate'));
-        }, 500);
 
         updateTotal(1); updateTotal(2);
     }
