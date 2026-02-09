@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Full Algoritme</title>
+    <title>Ryddigst.no - Presisjonsvisning</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -68,7 +68,7 @@
         .addon-box label { cursor: pointer; font-size: 15px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; pointer-events: none; }
 
         .list { list-style: none; margin: 25px 0; border-top: 1px solid #eee; flex-grow: 1; }
-        .list li { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; border-bottom: 1px solid #f5f5f7; }
+        .list li { display: flex; justify-content: space-between; padding: 14px 0; font-size: 14px; border-bottom: 1px solid #f5f5f7; }
         .total { font-size: 28px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 20px; margin-top: auto; }
         
         .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 18px; border-radius: 16px; font-weight: 600; margin-top: 24px; cursor: pointer; font-size: 17px; }
@@ -91,8 +91,8 @@
 
 <main>
     <div id="landing-content" class="hero">
-        <h1>Orden med algoritmer.</h1>
-        <p>Tast inn dine mål, så fyller vår teknologi skuffen din helt ut til kanten.</p>
+        <h1>Perfekt orden.<br>Hver eneste gang.</h1>
+        <p>Tast inn dine mål, så fyller vår algoritme skuffen din helt ut til kanten.</p>
     </div>
 
     <div class="calc-box">
@@ -139,7 +139,7 @@
 </footer>
 
 <script>
-    const boxes = [
+    const inventory = [
         { id: 'L', w: 20, d: 30, p: 149, n: 'Premium Large' },
         { id: 'M', w: 10, d: 20, p: 89, n: 'Premium Medium' },
         { id: 'S', w: 10, d: 10, p: 59, n: 'Premium Small' }
@@ -160,7 +160,6 @@
         const W = parseInt(document.getElementById('W').value);
         const D = parseInt(document.getElementById('D').value);
 
-        // Algoritme: Forsøk å fylle hele arealet kolonne for kolonne
         currentPlacements1 = fillDrawer(W, D, ['L', 'M', 'S']);
         currentPlacements2 = fillDrawer(W, D, ['M', 'S']);
 
@@ -174,45 +173,44 @@
         updateTotal(1); updateTotal(2);
     }
 
-    // NY FORBEDRET ALGORITME
+    // --- OPPGRADERT ALGORITME ---
     function fillDrawer(W, D, allowedTypes) {
         let placements = [];
         let x = 1;
         
-        // Finn tilgjengelige typer
-        const avail = boxes.filter(b => allowedTypes.includes(b.id));
+        const availableBoxes = inventory.filter(b => allowedTypes.includes(b.id));
 
         while (x <= W) {
-            // Bestem kolonnebredde (prioriter 20 om mulig)
+            // Velg kolonnebredde (20 eller 10)
             let colW = (x + 19 <= W && allowedTypes.includes('L')) ? 20 : (x + 9 <= W ? 10 : 0);
-            
-            if (colW === 0) break; // Ikke plass til flere kolonner
+            if (colW === 0) break;
 
             let y = 1;
             while (y <= D) {
-                // Finn den største boksen som passer i denne kolonnebredden og gjenværende dybde
+                let remainingD = D - y + 1;
                 let bestBox = null;
-                for (let b of avail) {
-                    if (b.w === colW && (y + b.d - 1) <= D) {
-                        if (!bestBox || b.d > bestBox.d) bestBox = b;
+
+                // Finn største boks som passer i restplassen i denne kolonnen
+                for (let b of availableBoxes) {
+                    if (b.w <= colW && b.d <= remainingD) {
+                        if (!bestBox || b.d > bestBox.d) {
+                            bestBox = b;
+                        }
                     }
                 }
 
-                // Hvis ingen boks med colW passer, prøv å se om en smalere boks (10) passer
-                if (!bestBox && colW === 20) {
-                     for (let b of avail) {
-                        if (b.w === 10 && (y + b.d - 1) <= D) {
-                            // Vi må splitte kolonnen her, men for enkelhets skyld i demoen fyller vi bare en 10-er
-                            bestBox = b;
-                        }
-                     }
-                }
-
                 if (bestBox) {
-                    placements.push({ id: bestBox.id, x: x, y: y, actualW: bestBox.w });
+                    // Hvis vi har en 20-kolonne og legger en 10-bred boks, 
+                    // sjekker vi om vi kan legge to ved siden av hverandre
+                    if (colW === 20 && bestBox.w === 10) {
+                        placements.push({ id: bestBox.id, x: x, y: y });
+                        placements.push({ id: bestBox.id, x: x + 10, y: y });
+                    } else {
+                        placements.push({ id: bestBox.id, x: x, y: y });
+                    }
                     y += bestBox.d;
                 } else {
-                    y++; // Hopper over 1cm hvis ingenting passer (sikkerhetsventil)
+                    y++; // Sikkerhetsventil
                 }
             }
             x += colW;
@@ -231,7 +229,7 @@
 
         let currentTotal = 0, summary = {};
         placements.forEach((p, index) => {
-            const b = boxes.find(x => x.id === p.id);
+            const b = inventory.find(x => x.id === p.id);
             currentTotal += b.p;
             summary[b.n] = (summary[b.n] || 0) + 1;
 
@@ -245,7 +243,7 @@
         });
 
         for (let n in summary) {
-            const price = boxes.find(b => b.n === n).p;
+            const price = inventory.find(b => b.n === n).p;
             list.innerHTML += `<li><span>${summary[n]}x ${n}</span> <span>${summary[n]*price},-</span></li>`;
         }
         return currentTotal;
