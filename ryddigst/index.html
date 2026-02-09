@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryddigst.no - Skuffekalkulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg-main: #ffffff;
+            --color-bg-secondary: #f5f5f7;
+            --color-text-main: #1d1d1f;
+            --color-text-secondary: #86868b;
+            --color-accent: #6e6e73; /* Dempet, sofistikert grå */
+            --color-button: #1d1d1f; /* Apple-svart for knapper */
+            --color-button-hover: #333336;
+            --color-border: #d2d2d7;
+            --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --page-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--color-bg-main);
+            color: var(--color-text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: var(--page-width);
+            margin: 0 auto;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--color-text-main);
+            text-decoration: none;
+        }
+        
+        /* Placeholder for logo-bilde. Bytt ut 'src' med stien til en av de genererte logoene */
+        .logo img {
+            height: 30px; 
+            margin-right: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--color-text-main);
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            max-width: var(--page-width);
+            margin: 4rem auto;
+            padding: 0 2rem;
+            min-height: 60vh; /* Ensure footer is pushed down */
+        }
+
+        /* HERO / KALKULATOR INPUT */
+        .calculator-hero {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .calculator-input {
+            flex: 1;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtext {
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-field {
+            flex: 1;
+        }
+
+        .input-field label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field input:focus {
+            border-color: var(--color-accent);
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--color-button);
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 99px; /* Pilleform */
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-button-hover);
+        }
+
+        .calculator-image {
+            flex: 1;
+            border-radius: 24px;
+            overflow: hidden;
+            /* Placeholder for skuffebilde. Bytt 'url' med stien til ditt bilde */
+            background-image: url('https://placehold.co/800x600/f5f5f7/d2d2d7?text=Skuffebilde+Placeholder'); 
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        /* RESULTAT SEKSJON (Skjult som standard) */
+        .results-section {
+            display: none; /* Skjult til 'Beregn' trykkes */
+            margin-top: 2rem;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .results-header h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .proposal-card {
+            background-color: var(--color-bg-secondary);
+            padding: 3rem;
+            border-radius: 24px;
+        }
+
+        .proposal-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* Visuell representasjon av skuffen (Foreløpig en grå boks) */
+        .drawer-visual {
+            background-color: #e0e0e0;
+            height: 250px;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            border: 2px dashed var(--color-border);
+        }
+
+        .product-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            border-top: 1px solid var(--color-border);
+            padding-top: 1.5rem;
+        }
+
+        .product-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .product-name {
+            color: var(--color-text-main);
+        }
+
+        .product-price {
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+        
+        .addons-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: rgba(0,0,0,0.03);
+            border-radius: 12px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            justify-content: space-between;
+        }
+        
+        .checkbox-group input {
+            margin-right: 1rem;
+            accent-color: var(--color-button);
+            transform: scale(1.2);
+        }
+        
+        .checkbox-label {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .addon-price {
+            color: var(--color-text-secondary);
+        }
+
+        .total-price-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--color-border);
+        }
+
+        .total-label {
+            color: var(--color-text-main);
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+        }
+        
+        .btn-add-to-cart {
+             width: 100%;
+             padding: 1.2rem;
+             border-radius: 16px;
+             font-size: 1.1rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--color-bg-secondary);
+            padding: 4rem 2rem;
+            margin-top: auto; /* Push to bottom */
+        }
+
+        .footer-content {
+            max-width: var(--page-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--color-text-secondary);
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            ryddigst.no
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#">Produkter</a></li>
+                <li><a href="#">Slik fungerer det</a></li>
+                <li><a href="#">Inspirasjon</a></li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <span>Min konto</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </div>
+    </header>
+
+    <main>
+        <section class="calculator-hero" id="calculator-hero">
+            <div class="calculator-input">
+                <h1>SKUFFE-KALKULATOR</h1>
+                <p class="subtext">Tast inn målene på skuffen din, så regner vår algoritme ut den perfekte løsningen for deg på sekunder.</p>
+                
+                <div class="input-group">
+                    <div class="input-field">
+                        <label for="width">Innvendig bredde (cm)</label>
+                        <input type="number" id="width" placeholder="F.eks. 56">
+                    </div>
+                    <div class="input-field">
+                        <label for="depth">Innvendig dybde (cm)</label>
+                        <input type="number" id="depth" placeholder="F.eks. 48">
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="beregnForslag()">Beregn din løsning</button>
+            </div>
+            <div class="calculator-image">
+                </div>
+        </section>
+
+        <section class="results-section" id="results-section">
+            <div class="results-header">
+                <h2>Dine skreddersydde løsninger</h2>
+                <p class="subtext">Basert på målene <strong><span id="res-width"></span> x <span id="res-depth"></span> cm</strong>.</p>
+            </div>
+            
+            <div class="results-grid">
+                <div class="proposal-card">
+                    <h3>Alternativ 1: Minimalistisk (Færrest bokser)</h3>
+                    <div class="drawer-visual">
+                        Visuell representasjon kommer her...
+                    </div>
+                    
+                    <ul class="product-list" id="list-minimal">
+                        </ul>
+                    
+                    <div class="addons-section">
+                        <label class="checkbox-group">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="addon-labels-minimal" onchange="updateTotal('minimal')">
+                                <span class="checkbox-label">Legg til etikett-pakke</span>
+                            </div>
+                            <span class="addon-price">79,-</span>
+                        </label>
+                    </div>
+
+                    <div class="total-price-section">
+                        <span class="total-label">Totalpris</span>
+                        <span class="total-amount" id="total-minimal">0,-</span>
+                    </div>
+                    
+                    <button class="btn-primary btn-add-to-cart">Legg i handlekurv</button>
+                </div>
+
+                <div class="proposal-card">
+                    <h3>Alternativ 2: Fleksibel (Mest variasjon)</h3>
+                    <div class="drawer-visual">
+                        Visuell representasjon kommer her...
+                    </div>
+                    
+                    <ul class="product-list" id="list-varied">
+                        </ul>
+
+                    <div class="addons-section">
+                        <label class="checkbox-group">
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="addon-labels-varied" onchange="updateTotal('varied')">
+                                <span class="checkbox-label">Legg til etikett-pakke</span>
+                            </div>
+                            <span class="addon-price">79,-</span>
+                        </label>
+                    </div>
+
+                    <div class="total-price-section">
+                        <span class="total-label">Totalpris</span>
+                        <span class="total-amount" id="total-varied">0,-</span>
+                    </div>
+                    
+                    <button class="btn-primary btn-add-to-cart">Legg i handlekurv</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">Om oss</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="#">Vilkår & Betingelser</a></li>
+                    <li><a href="#">Personvern</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                © 2023 Ryddigst.no. Designet i Tromsø.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- PRODUKTDATA (Enkel å justere) ---
+        // Her kan du legge til, fjerne eller kommentere ut bokser.
+        // Prisene endres direkte her.
+        const bokser = [
+            // Modul 5-serien (Bredde 5cm)
+            { id: 'm5-s', navn: 'Modul 5 Small (5x10cm)', pris: 49 },
+            { id: 'm5-m', navn: 'Modul 5 Medium (5x20cm)', pris: 79 },
+            { id: 'm5-l', navn: 'Modul 5 Large (5x30cm)', pris: 109 },
+            // { id: 'm5-xl', navn: 'Modul 5 X-Large (5x40cm)', pris: 139 }, // Eksempel på utkommentert boks
+
+            // Modul 6-serien (Bredde 6cm)
+            { id: 'm6-s', navn: 'Modul 6 Small (6x12cm)', pris: 59 },
+            { id: 'm6-m', navn: 'Modul 6 Medium (6x24cm)', pris: 89 },
+            { id: 'm6-l', navn: 'Modul 6 Large (6x36cm)', pris: 119 },
+            
+            // Brede moduler
+            { id: 'm10-m', navn: 'Modul 10 Wide (10x20cm)', pris: 129 },
+            { id: 'm12-m', navn: 'Modul 12 Wide (12x24cm)', pris: 149 },
+
+            // Tilbehør
+            { id: 'matte', navn: 'Sklisikker Matte (Tilpasset)', pris: 199 },
+            { id: 'klips', navn: 'Koblingsklips (Pakke på 10)', pris: 49 }
+        ];
+
+        const ETIKETT_PRIS = 79;
+
+        // Globale variabler for å lagre gjeldende forslag
+        let currentProposalMinimal = [];
+        let currentProposalVaried = [];
+
+        // --- HOVEDFUNKSJON: Kalles når brukeren trykker "Beregn" ---
+        function beregnForslag() {
+            const widthInput = document.getElementById('width').value;
+            const depthInput = document.getElementById('depth').value;
+
+            if (!widthInput || !depthInput || widthInput <= 0 || depthInput <= 0) {
+                alert("Vennligst fyll inn gyldig bredde og dybde.");
+                return;
+            }
+
+            // 1. Oppdater overskriften med målene
+            document.getElementById('res-width').innerText = widthInput;
+            document.getElementById('res-depth').innerText = depthInput;
+
+            // 2. Generer "fake" forslag (Hardkodet for demo)
+            currentProposalMinimal = genererMockForslag('minimal');
+            currentProposalVaried = genererMockForslag('varied');
+
+            // 3. Fyll inn data i HTML for begge forslag
+            populerForslagIHTML('minimal', currentProposalMinimal);
+            populerForslagIHTML('varied', currentProposalVaried);
+
+            // 4. Vis resultatseksjonen og skjul heroen
+            document.getElementById('calculator-hero').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+            
+            // Scroll til toppen av resultatene
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- HJELPEFUNKSJONER ---
+
+        // Mock-up logikk som returnerer en fast liste med produkter basert på type
+        function genererMockForslag(type) {
+            let liste = [];
+            // Vi bruker filter for å finne boksene i vår 'database' over
+            if (type === 'minimal') {
+                // Forslag med færre, større bokser
+                liste.push({ ...bokser.find(b => b.id === 'm12-m'), antall: 3 });
+                liste.push({ ...bokser.find(b => b.id === 'm10-m'), antall: 2 });
+                liste.push({ ...bokser.find(b => b.id === 'm6-l'), antall: 1 });
+                liste.push({ ...bokser.find(b => b.id === 'matte'), antall: 1 });
+            } else {
+                // Forslag med mange forskjellige, mindre bokser
+                liste.push({ ...bokser.find(b => b.id === 'm5-s'), antall: 4 });
+                liste.push({ ...bokser.find(b => b.id === 'm5-m'), antall: 3 });
+                liste.push({ ...bokser.find(b => b.id === 'm6-s'), antall: 3 });
+                liste.push({ ...bokser.find(b => b.id === 'm6-m'), antall: 2 });
+                liste.push({ ...bokser.find(b => b.id === 'klips'), antall: 2 });
+                liste.push({ ...bokser.find(b => b.id === 'matte'), antall: 1 });
+            }
+            return liste;
+        }
+
+        // Fyller inn produktlisten og oppdaterer totalprisen for et gitt forslag
+        function populerForslagIHTML(type, proposalList) {
+            const listElement = document.getElementById(`list-${type}`);
+            listElement.innerHTML = ''; // Tøm listen først
+
+            let baseTotal = 0;
+
+            proposalList.forEach(item => {
+                const itemTotal = item.pris * item.antall;
+                baseTotal += itemTotal;
+
+                // Lag HTML for hvert produkt i listen
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="product-name">${item.antall}x ${item.navn}</span>
+                    <span class="product-price">${itemTotal},-</span>
+                `;
+                listElement.appendChild(li);
+            });
+
+            // Lagre basistotalen (uten addons) på elementet for senere bruk
+            const totalElement = document.getElementById(`total-${type}`);
+            totalElement.dataset.baseTotal = baseTotal;
+
+            // Resett checkbox og oppdater visningen av totalpris
+            document.getElementById(`addon-labels-${type}`).checked = false;
+            updateTotal(type);
+        }
+
+        // Oppdaterer totalprisen basert på om checkboxen er valgt eller ikke
+        function updateTotal(type) {
+            const totalElement = document.getElementById(`total-${type}`);
+            const checkbox = document.getElementById(`addon-labels-${type}`);
+            
+            let currentTotal = parseInt(totalElement.dataset.baseTotal);
+
+            if (checkbox.checked) {
+                currentTotal += ETIKETT_PRIS;
+            }
+
+            totalElement.innerText = currentTotal + ",-";
+        }
+    </script>
+</body>
+</html>
