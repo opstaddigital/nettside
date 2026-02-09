@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Presisjonsvisning</title>
+    <title>Ryddigst.no - Dynamisk Kalkulator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,7 +26,6 @@
 
         main { max-width: 1100px; margin: 0 auto; padding: 40px 20px; flex: 1; width: 100%; }
 
-        /* HERO SEKSJON - Med smooth transition */
         #landing-content { text-align: center; padding: 60px 0; max-width: 800px; margin: 0 auto; transition: opacity 0.4s ease, transform 0.4s ease; }
         #landing-content.hidden { opacity: 0; transform: translateY(-20px); pointer-events: none; }
         .hero h1 { font-size: 56px; font-weight: 600; letter-spacing: -2px; margin-bottom: 24px; line-height: 1.1; }
@@ -42,8 +41,8 @@
         .results-grid.visible { display: grid; opacity: 1; }
         .card { background: white; border-radius: 28px; padding: 35px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
 
-        .drawer-container { background: var(--drawer-wood); padding: 14px; border-radius: 14px; margin-bottom: 30px; width: 100%; }
-        .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 3px; width: 100%; border-radius: 4px; }
+        .drawer-container { background: var(--drawer-wood); padding: 14px; border-radius: 14px; margin-bottom: 30px; width: 100%; overflow: hidden; }
+        .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 2px; width: 100%; border-radius: 4px; }
         
         @keyframes boxIn {
             0% { transform: scale(0.8); opacity: 0; }
@@ -56,7 +55,7 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            font-size: 11px; 
+            font-size: 10px; 
             color: var(--apple-secondary); 
             font-weight: 600; 
             opacity: 0;
@@ -69,7 +68,7 @@
         .addon-box label { cursor: pointer; font-size: 15px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; pointer-events: none; }
 
         .list { list-style: none; margin: 25px 0; border-top: 1px solid #eee; flex-grow: 1; }
-        .list li { display: flex; justify-content: space-between; padding: 14px 0; font-size: 15px; border-bottom: 1px solid #f5f5f7; }
+        .list li { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; border-bottom: 1px solid #f5f5f7; }
         .total { font-size: 28px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 20px; margin-top: auto; }
         
         .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 18px; border-radius: 16px; font-weight: 600; margin-top: 24px; cursor: pointer; font-size: 17px; }
@@ -93,7 +92,7 @@
 <main>
     <div id="landing-content" class="hero">
         <h1>Perfekt orden.<br>Hver eneste gang.</h1>
-        <p>Tast inn målene dine, og se hvordan vi utnytter hver centimeter.</p>
+        <p>Tast inn dine mål, så regner vår algoritme ut den optimale kombinasjonen av moduler.</p>
     </div>
 
     <div class="calc-box">
@@ -135,76 +134,110 @@
 
 <footer>
     <div class="footer-container">
-        <div>© 2026 Ryddigst.no. En del av Opstad Digital.</div>
+        <div>© 2026 Ryddigst.no. Algoritme-drevet organisering.</div>
     </div>
 </footer>
 
 <script>
-    const inventory = {
-        L: { w: 20, d: 30, p: 149, n: 'Premium Large' },
-        M: { w: 10, d: 20, p: 89, n: 'Premium Medium' },
-        S: { w: 10, d: 10, p: 59, n: 'Premium Small' }
-    };
+    // --- KONFIGURASJON AV BOKSER ---
+    const boxes = [
+        { id: 'L', w: 20, d: 30, p: 149, n: 'Premium Large' },
+        { id: 'M', w: 10, d: 20, p: 89, n: 'Premium Medium' },
+        { id: 'S', w: 10, d: 10, p: 59, n: 'Premium Small' }
+    ];
     const ADDON_PRICE = 79;
     let basePrice1 = 0, basePrice2 = 0, cartCount = 0;
+    let currentPlacements1 = [], currentPlacements2 = [];
 
     function generate() {
-        // 1. Skjul landing-content med stil
         const hero = document.getElementById('landing-content');
         hero.classList.add('hidden');
         
-        // Fjern den fra layouten etter animasjonen er ferdig (0.4s)
         setTimeout(() => {
             hero.style.display = 'none';
-            // 2. Vis resultatene
-            const resGrid = document.getElementById('res');
-            resGrid.classList.add('visible');
-
-            // 3. Start boks-animasjon
-            setTimeout(() => {
-                document.querySelectorAll('.box-unit').forEach(el => el.classList.add('animate'));
-            }, 100);
+            document.getElementById('res').classList.add('visible');
         }, 400);
 
         const W = parseInt(document.getElementById('W').value);
         const D = parseInt(document.getElementById('D').value);
 
-        const setup1 = [{id:'L', x:1, y:1}, {id:'L', x:21, y:1}, {id:'M', x:41, y:1}, {id:'M', x:51, y:1}];
-        const setup2 = [
-            {id:'S', x:1, y:1}, {id:'S', x:11, y:1}, {id:'S', x:21, y:1}, {id:'S', x:31, y:1}, {id:'S', x:41, y:1}, {id:'S', x:51, y:1},
-            {id:'S', x:1, y:11}, {id:'S', x:11, y:11}, {id:'M', x:21, y:11}, {id:'M', x:31, y:11}, {id:'M', x:41, y:11}
-        ];
+        // Algoritmen kjører her
+        currentPlacements1 = solvePacking(W, D, ['L', 'M', 'S']);
+        currentPlacements2 = solvePacking(W, D, ['M', 'S']);
 
-        basePrice1 = render('draw1', 'list1', W, D, setup1);
-        basePrice2 = render('draw2', 'list2', W, D, setup2);
+        basePrice1 = render('draw1', 'list1', W, D, currentPlacements1);
+        basePrice2 = render('draw2', 'list2', W, D, currentPlacements2);
+
+        setTimeout(() => {
+            document.querySelectorAll('.box-unit').forEach(el => el.classList.add('animate'));
+        }, 500);
 
         updateTotal(1); updateTotal(2);
+    }
+
+    // --- SELVE PAKKE-ALGORITMEN ---
+    function solvePacking(drawerW, drawerD, allowedTypes) {
+        let placements = [];
+        let x = 1;
+        
+        const availableBoxes = boxes.filter(b => allowedTypes.includes(b.id));
+
+        while (x <= drawerW) {
+            // Sjekk hvilken bredde vi skal bruke for denne kolonnen
+            let colW = 0;
+            if (x + 19 <= drawerW && allowedTypes.includes('L')) colW = 20;
+            else if (x + 9 <= drawerW) colW = 10;
+            else break; // Ingen flere bokser passer i bredden
+
+            let y = 1;
+            while (y <= drawerD) {
+                // Finn beste boks for denne plassen i kolonnen
+                let bestBox = null;
+                for (let b of availableBoxes) {
+                    if (b.w === colW && y + b.d - 1 <= drawerD) {
+                        if (!bestBox || b.d > bestBox.d) bestBox = b;
+                    }
+                }
+
+                if (bestBox) {
+                    placements.push({ id: bestBox.id, x: x, y: y });
+                    y += bestBox.d;
+                } else {
+                    y++; // Gå videre hvis ingen boks passer akkurat her
+                }
+            }
+            x += colW;
+        }
+        return placements;
     }
 
     function render(drawId, listId, W, D, placements) {
         const draw = document.getElementById(drawId);
         const list = document.getElementById(listId);
         draw.innerHTML = ''; list.innerHTML = '';
+        
         draw.style.gridTemplateColumns = `repeat(${W}, 1fr)`;
         draw.style.gridTemplateRows = `repeat(${D}, 1fr)`;
         draw.style.aspectRatio = `${W} / ${D}`;
 
         let currentTotal = 0, summary = {};
         placements.forEach((p, index) => {
-            const box = inventory[p.id];
-            currentTotal += box.p;
-            summary[box.n] = (summary[box.n] || 0) + 1;
+            const b = boxes.find(x => x.id === p.id);
+            currentTotal += b.p;
+            summary[b.n] = (summary[b.n] || 0) + 1;
+
             const el = document.createElement('div');
             el.className = 'box-unit';
-            el.style.gridColumn = `${p.x} / span ${box.w}`;
-            el.style.gridRow = `${p.y} / span ${box.d}`;
-            el.style.animationDelay = (index * 0.05) + 's';
-            el.innerText = `${box.w}x${box.d}`;
+            el.style.gridColumn = `${p.x} / span ${b.w}`;
+            el.style.gridRow = `${p.y} / span ${b.d}`;
+            el.style.animationDelay = (index * 0.02) + 's';
+            el.innerText = `${b.w}x${b.d}`;
             draw.appendChild(el);
         });
 
         for (let n in summary) {
-            list.innerHTML += `<li><span>${summary[n]}x ${n}</span> <span>${summary[n]*inventory[Object.keys(inventory).find(k=>inventory[k].n===n)].p},-</span></li>`;
+            const price = boxes.find(b => b.n === n).p;
+            list.innerHTML += `<li><span>${summary[n]}x ${n}</span> <span>${summary[n]*price},-</span></li>`;
         }
         return currentTotal;
     }
@@ -222,7 +255,8 @@
     }
 
     function addToCart(num) {
-        cartCount += (num === 1 ? 4 : 11);
+        const count = (num === 1) ? currentPlacements1.length : currentPlacements2.length;
+        cartCount += count;
         document.getElementById('cart-nav').innerText = `🛒 Handlekurv (${cartCount})`;
         const note = document.getElementById('notification');
         note.style.display = 'block';
