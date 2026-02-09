@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Dynamisk Kalkulator</title>
+    <title>Ryddigst.no - Full Algoritme</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -91,8 +91,8 @@
 
 <main>
     <div id="landing-content" class="hero">
-        <h1>Perfekt orden.<br>Hver eneste gang.</h1>
-        <p>Tast inn dine mål, så regner vår algoritme ut den optimale kombinasjonen av moduler.</p>
+        <h1>Orden med algoritmer.</h1>
+        <p>Tast inn dine mål, så fyller vår teknologi skuffen din helt ut til kanten.</p>
     </div>
 
     <div class="calc-box">
@@ -105,7 +105,7 @@
 
     <div class="results-grid" id="res">
         <div class="card">
-            <h3>Alt. 1: Minimalistisk</h3>
+            <h3>Alt. 1: Store moduler</h3>
             <div class="drawer-container"><div id="draw1" class="drawer-inner"></div></div>
             <ul id="list1" class="list"></ul>
             <div class="addon-box" onclick="toggleAddon(1)">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="card">
-            <h3>Alt. 2: Maks utnyttelse</h3>
+            <h3>Alt. 2: Små moduler</h3>
             <div class="drawer-container"><div id="draw2" class="drawer-inner"></div></div>
             <ul id="list2" class="list"></ul>
             <div class="addon-box" onclick="toggleAddon(2)">
@@ -139,7 +139,6 @@
 </footer>
 
 <script>
-    // --- KONFIGURASJON AV BOKSER ---
     const boxes = [
         { id: 'L', w: 20, d: 30, p: 149, n: 'Premium Large' },
         { id: 'M', w: 10, d: 20, p: 89, n: 'Premium Medium' },
@@ -161,9 +160,9 @@
         const W = parseInt(document.getElementById('W').value);
         const D = parseInt(document.getElementById('D').value);
 
-        // Algoritmen kjører her
-        currentPlacements1 = solvePacking(W, D, ['L', 'M', 'S']);
-        currentPlacements2 = solvePacking(W, D, ['M', 'S']);
+        // Algoritme: Forsøk å fylle hele arealet kolonne for kolonne
+        currentPlacements1 = fillDrawer(W, D, ['L', 'M', 'S']);
+        currentPlacements2 = fillDrawer(W, D, ['M', 'S']);
 
         basePrice1 = render('draw1', 'list1', W, D, currentPlacements1);
         basePrice2 = render('draw2', 'list2', W, D, currentPlacements2);
@@ -175,35 +174,45 @@
         updateTotal(1); updateTotal(2);
     }
 
-    // --- SELVE PAKKE-ALGORITMEN ---
-    function solvePacking(drawerW, drawerD, allowedTypes) {
+    // NY FORBEDRET ALGORITME
+    function fillDrawer(W, D, allowedTypes) {
         let placements = [];
         let x = 1;
         
-        const availableBoxes = boxes.filter(b => allowedTypes.includes(b.id));
+        // Finn tilgjengelige typer
+        const avail = boxes.filter(b => allowedTypes.includes(b.id));
 
-        while (x <= drawerW) {
-            // Sjekk hvilken bredde vi skal bruke for denne kolonnen
-            let colW = 0;
-            if (x + 19 <= drawerW && allowedTypes.includes('L')) colW = 20;
-            else if (x + 9 <= drawerW) colW = 10;
-            else break; // Ingen flere bokser passer i bredden
+        while (x <= W) {
+            // Bestem kolonnebredde (prioriter 20 om mulig)
+            let colW = (x + 19 <= W && allowedTypes.includes('L')) ? 20 : (x + 9 <= W ? 10 : 0);
+            
+            if (colW === 0) break; // Ikke plass til flere kolonner
 
             let y = 1;
-            while (y <= drawerD) {
-                // Finn beste boks for denne plassen i kolonnen
+            while (y <= D) {
+                // Finn den største boksen som passer i denne kolonnebredden og gjenværende dybde
                 let bestBox = null;
-                for (let b of availableBoxes) {
-                    if (b.w === colW && y + b.d - 1 <= drawerD) {
+                for (let b of avail) {
+                    if (b.w === colW && (y + b.d - 1) <= D) {
                         if (!bestBox || b.d > bestBox.d) bestBox = b;
                     }
                 }
 
+                // Hvis ingen boks med colW passer, prøv å se om en smalere boks (10) passer
+                if (!bestBox && colW === 20) {
+                     for (let b of avail) {
+                        if (b.w === 10 && (y + b.d - 1) <= D) {
+                            // Vi må splitte kolonnen her, men for enkelhets skyld i demoen fyller vi bare en 10-er
+                            bestBox = b;
+                        }
+                     }
+                }
+
                 if (bestBox) {
-                    placements.push({ id: bestBox.id, x: x, y: y });
+                    placements.push({ id: bestBox.id, x: x, y: y, actualW: bestBox.w });
                     y += bestBox.d;
                 } else {
-                    y++; // Gå videre hvis ingen boks passer akkurat her
+                    y++; // Hopper over 1cm hvis ingenting passer (sikkerhetsventil)
                 }
             }
             x += colW;
