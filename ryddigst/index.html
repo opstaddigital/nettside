@@ -11,263 +11,261 @@
             --apple-gray: #f5f5f7;
             --apple-text: #1d1d1f;
             --apple-secondary: #86868b;
+            --accent: #0071e3;
             --drawer-wood: #d1d1d1;
             --drawer-inside: #e5e5e5;
-            --apple-blue: #0071e3;
+            
+            /* Akryl-effekt */
+            --acrylic-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 245, 255, 0.6) 100%);
+            --acrylic-edge: rgba(0, 0, 0, 0.08);
+            --acrylic-highlight: rgba(255, 255, 255, 0.8);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; }
 
         header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px; }
-        .logo-link img { height: 60px; width: auto; display: block; object-fit: contain; }
-        .cart-status { background: var(--apple-gray); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; padding: 0 20px; }
+        .logo-link img { height: 50px; width: auto; display: block; object-fit: contain; }
 
-        main { max-width: 1100px; margin: 0 auto; padding: 40px 20px; flex: 1; width: 100%; }
+        main { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
 
-        #landing-content { text-align: center; padding: 60px 0; max-width: 800px; margin: 0 auto; transition: opacity 0.4s ease, transform 0.4s ease; }
-        #landing-content.hidden { opacity: 0; transform: translateY(-20px); pointer-events: none; height: 0; padding: 0; overflow: hidden; }
-        .hero h1 { font-size: 56px; font-weight: 600; letter-spacing: -2px; margin-bottom: 24px; line-height: 1.1; }
-        .hero p { font-size: 22px; color: var(--apple-secondary); line-height: 1.5; }
-
-        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 40px; margin-bottom: 40px; text-align: center; position: relative; z-index: 10; }
-        .input-group { display: flex; gap: 24px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
+        /* HERO / CALC BOX */
+        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 30px; margin-bottom: 40px; text-align: center; }
+        .input-group { display: flex; gap: 20px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
         .input-item { display: flex; flex-direction: column; text-align: left; }
-        .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 8px; text-transform: uppercase; }
-        .input-item input { padding: 14px; border-radius: 14px; border: 1px solid #d2d2d7; width: 140px; font-size: 18px; outline: none; }
+        .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 5px; text-transform: uppercase; }
+        .input-item input { padding: 12px; border-radius: 10px; border: 1px solid #d2d2d7; width: 100px; font-size: 16px; text-align: center; }
 
-        .results-grid { display: none; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; opacity: 0; transition: opacity 0.5s ease; }
-        .results-grid.visible { display: grid; opacity: 1; }
-        .card { background: white; border-radius: 28px; padding: 35px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
+        /* RESULTS */
+        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 850px) { .results-grid { grid-template-columns: 1fr; } }
 
-        .drawer-container { background: var(--drawer-wood); padding: 14px; border-radius: 14px; margin-bottom: 30px; width: 100%; }
-        .drawer-inner { background: var(--drawer-inside); display: grid; position: relative; gap: 3px; width: 100%; border-radius: 4px; }
-        
-        @keyframes boxIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .box-unit { 
-            background: rgba(255, 255, 255, 0.92); 
-            border: 1px solid rgba(0,0,0,0.08); 
-            border-radius: 6px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 10px; 
-            color: var(--apple-secondary); 
-            font-weight: 600; 
-            opacity: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        .card { background: white; border-radius: 28px; padding: 30px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
+        .card h3 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+        .card .subtitle { font-size: 13px; color: var(--apple-secondary); margin-bottom: 20px; }
+
+        /* VISUALIZER */
+        .visualizer-area {
+            background: #f0f0f2;
+            padding: 40px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 350px;
+            margin-bottom: 25px;
         }
-        .box-unit.animate { animation: boxIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .drawer-outline {
+            position: relative;
+            background: #ffffff;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05), 0 20px 50px rgba(0,0,0,0.15);
+            border: 6px solid #333;
+            border-radius: 4px;
+        }
+        .box-item {
+            position: absolute;
+            background: var(--acrylic-surface);
+            border: 1px solid var(--acrylic-edge);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(0,0,0,0.4);
+            box-shadow: 1px 2px 4px rgba(0,0,0,0.08), inset 0 0 0 1px var(--acrylic-highlight);
+            backdrop-filter: blur(5px);
+            box-sizing: border-box;
+        }
 
-        .addon-box { background: var(--apple-gray); padding: 18px; border-radius: 16px; margin: 25px 0; display: flex; align-items: center; cursor: pointer; user-select: none; }
-        .addon-box input { margin-right: 15px; width: 20px; height: 20px; accent-color: var(--apple-text); pointer-events: none; }
-        .addon-box label { cursor: pointer; font-size: 15px; font-weight: 500; display: flex; justify-content: space-between; width: 100%; pointer-events: none; }
+        /* BILLING / LIST */
+        .list-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
+        .list-table th { text-align: left; color: var(--apple-secondary); padding-bottom: 10px; border-bottom: 1px solid #eee; font-weight: 500; }
+        .list-table td { padding: 12px 0; border-bottom: 1px solid #f9f9f9; }
+        .text-right { text-align: right; }
 
-        .list { list-style: none; margin: 25px 0; border-top: 1px solid #eee; flex-grow: 1; }
-        .list li { display: flex; justify-content: space-between; padding: 12px 0; font-size: 15px; border-bottom: 1px solid #f5f5f7; }
-        .total { font-size: 28px; font-weight: 600; display: flex; justify-content: space-between; padding-top: 20px; margin-top: auto; }
-        
-        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 18px; border-radius: 16px; font-weight: 600; margin-top: 24px; cursor: pointer; font-size: 17px; }
-        #notification { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--apple-text); color: white; padding: 16px 32px; border-radius: 50px; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .upsell-box {
+            background: var(--apple-gray);
+            padding: 15px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
 
-        footer { background: var(--apple-gray); padding: 40px 20px; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 60px; }
-        .footer-container { max-width: 1100px; margin: 0 auto; color: var(--apple-secondary); font-size: 14px; text-align: center; }
+        .total-row { display: flex; justify-content: space-between; align-items: baseline; padding-top: 15px; border-top: 1px solid #eee; }
+        .grand-total { font-size: 26px; font-weight: 700; }
+
+        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-weight: 600; font-size: 15px; margin-top: 20px; cursor: pointer; transition: all 0.2s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-update { background: var(--accent); width: auto; margin-top: 0; padding: 12px 25px; }
+
+        .efficiency-badge { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; display: block; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="nav-container">
-        <a href="index.html" class="logo-link">
-            <img src="pnglogo.png" alt="ryddigst.no">
+        <a href="#" class="logo-link">
+            <img src="pnglogo.png" alt="ryddigst.no" onerror="this.outerHTML='<span style=\'font-weight:700; font-size:24px\'>Ryddigst.no</span>'">
         </a>
-        <div class="cart-status" id="cart-nav">🛒 Handlekurv (0)</div>
     </div>
 </header>
 
 <main>
-    <div id="landing-content" class="hero">
-        <h1>Perfekt orden.<br>Hver eneste gang.</h1>
-        <p>Vår algoritme pusler sammen dine skreddersydde moduler for 100% utnyttelse.</p>
-    </div>
-
     <div class="calc-box">
         <div class="input-group">
-            <div class="input-item"><label>Bredde (cm)</label><input type="number" id="W" value="60"></div>
-            <div class="input-item"><label>Dybde (cm)</label><input type="number" id="D" value="50"></div>
-            <button class="btn" style="width: auto; margin: 0; padding: 14px 40px;" onclick="generate()">Beregn min skuff</button>
+            <div class="input-item"><label>Bredde (cm)</label><input type="number" id="drawerW" value="61"></div>
+            <div class="input-item"><label>Dybde (cm)</label><input type="number" id="drawerD" value="50"></div>
+            <button class="btn btn-update" onclick="runCalculation()">Oppdater beregning</button>
         </div>
     </div>
 
-    <div id="res" class="results-grid">
-        <div class="card">
-            <h3>Alt. 1: Bestseller-fyll</h3>
-            <div class="drawer-container"><div id="draw1" class="drawer-inner"></div></div>
-            <ul id="list1" class="list"></ul>
-            <div class="addon-box" onclick="toggleAddon(1)">
-                <input type="checkbox" id="addon1">
-                <label>Legg til merkelapper (sett) <span>79,-</span></label>
-            </div>
-            <div class="total"><span>Sum</span><span id="p1">0,-</span></div>
-            <button class="btn" onclick="addToCart(1)">Legg i handlekurv</button>
+    <div class="results-grid" id="output">
         </div>
-
-        <div class="card">
-            <h3>Alt. 2: Maksimal presisjon</h3>
-            <div class="drawer-container"><div id="draw2" class="drawer-inner"></div></div>
-            <ul id="list2" class="list"></ul>
-            <div class="addon-box" onclick="toggleAddon(2)">
-                <input type="checkbox" id="addon2">
-                <label>Legg til merkelapper (sett) <span>79,-</span></label>
-            </div>
-            <div class="total"><span>Sum</span><span id="p2">0,-</span></div>
-            <button class="btn" onclick="addToCart(2)">Legg i handlekurv</button>
-        </div>
-    </div>
 </main>
 
-<div id="notification">Varene er lagt i handlekurven!</div>
-
-<footer>
-    <div class="footer-container">
-        <div>© 2026 Ryddigst.no. En del av Opstad Digital.</div>
-    </div>
-</footer>
-
 <script>
-    const inventory = [
-        { sku: 4, w: 10, d: 15, p: 79, n: 'Bestseller (10x15)' },
-        { sku: 1, w: 10, d: 10, p: 59, n: 'Anker (10x10)' },
-        { sku: 8, w: 12, d: 15, p: 99, n: 'Anker (12x15)' },
-        { sku: 9, w: 13, d: 15, p: 109, n: 'Volum (13x15)' },
-        { sku: 6, w: 12, d: 13, p: 89, n: 'Justering (12x13)' },
-        { sku: 2, w: 10, d: 13, p: 79, n: 'Justering (10x13)' },
-        { sku: 5, w: 11, d: 15, p: 89, n: 'Spesial (11x15)' },
-        { sku: 3, w: 10, d: 14, p: 85, n: 'Spesial (10x14)' },
-        { sku: 7, w: 11, d: 12, p: 79, n: 'Spesial (11x12)' }
+    const products = [
+        { sku: 10, w: 20, d: 30, p: 249, n: 'Premium XL' },
+        { sku: 9, w: 13, d: 15, p: 109, n: 'Premium Volum' },
+        { sku: 8, w: 12, d: 15, p: 99, n: 'Premium Anker' },
+        { sku: 6, w: 12, d: 13, p: 89, n: 'Premium Justering' },
+        { sku: 5, w: 11, d: 15, p: 89, n: 'Premium Spesial' },
+        { sku: 7, w: 11, d: 12, p: 79, n: 'Premium Spesial' },
+        { sku: 4, w: 10, d: 15, p: 79, n: 'Premium Bestselger' },
+        { sku: 3, w: 10, d: 14, p: 85, n: 'Premium Spesial' },
+        { sku: 2, w: 10, d: 13, p: 79, n: 'Premium Justering' },
+        { sku: 1, w: 10, d: 10, p: 59, n: 'Premium Anker' }
     ];
 
-    const ADDON_PRICE = 79;
-    let basePrice1 = 0, basePrice2 = 0, cartCount = 0;
+    async function runCalculation() {
+        const W = parseInt(document.getElementById('drawerW').value);
+        const D = parseInt(document.getElementById('drawerD').value);
+        const out = document.getElementById('output');
+        if (!W || !D) return;
 
-    function generate() {
-        const hero = document.getElementById('landing-content');
-        hero.classList.add('hidden');
-        setTimeout(() => {
-            hero.style.display = 'none';
-            document.getElementById('res').classList.add('visible');
-        }, 400);
+        out.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 50px;">Optimaliserer din skuff...</div>';
+        await new Promise(r => setTimeout(r, 100));
 
-        const W = parseInt(document.getElementById('W').value);
-        const D = parseInt(document.getElementById('D').value);
-
-        // Algoritmen kjører for to ulike strategier
-        basePrice1 = render('draw1', 'list1', W, D, smartSolve(W, D, [10, 12, 13]));
-        basePrice2 = render('draw2', 'list2', W, D, smartSolve(W, D, [10, 11, 12, 13, 14]));
-
-        setTimeout(() => {
-            document.querySelectorAll('.box-unit').forEach(el => el.classList.add('animate'));
-        }, 500);
-        updateTotal(1); updateTotal(2);
-    }
-
-    // NY SMART ALGORITME SOM FINNER KOMBINASJONER
-    function findBestCombo(target, availableSizes) {
-        let best = { sum: 0, items: [] };
-        // Enkel sjekk for kombinasjoner av opptil 6 elementer
-        function search(currentSum, currentItems) {
-            if (currentSum > target) return;
-            if (currentSum > best.sum) {
-                best = { sum: currentSum, items: [...currentItems] };
-            }
-            if (currentSum === target) return;
-            if (currentItems.length > 6) return;
-
-            for (let s of availableSizes) {
-                search(currentSum + s, [...currentItems, s]);
-                if (best.sum === target) return;
-            }
+        // Alt 1: Effektivitet
+        let l1 = solve(W, D, [...products].sort((a,b) => (b.w*b.d)-(a.w*a.d)), 1200);
+        // Alt 2: Variasjon
+        let l2 = null; let maxScore = -1;
+        for(let i=0; i<15; i++) {
+            let res = solve(W, D, [...products].sort(() => Math.random()-0.5), 300);
+            let score = (res.coverage === 100 ? 5000 : res.coverage) + res.items.length;
+            if(score > maxScore) { maxScore = score; l2 = res; }
         }
-        search(0, []);
-        return best.items;
+
+        out.innerHTML = '';
+        renderCard('Alternativ 1: Minimalistisk', 'Færrest mulig bokser for et rent uttrykk.', l1, W, D, out, 1);
+        renderCard('Alternativ 2: Maks organisering', 'Maksimal inndeling for perfekt sortering.', l2, W, D, out, 2);
     }
 
-    function smartSolve(drawerW, drawerD, allowedWidths) {
-        const widthCombo = findBestCombo(drawerW, allowedWidths);
-        const allowedDepths = [10, 12, 13, 14, 15];
-        const depthCombo = findBestCombo(drawerD, allowedDepths);
-        
-        let placements = [];
-        let currentX = 1;
+    function solve(W, D, inventory, timeLimit) {
+        let grid = new Int8Array(W * D).fill(0);
+        let placed = [];
+        let best = { items: [], coverage: 0 };
+        let startTime = Date.now();
 
-        widthCombo.forEach(w => {
-            let currentY = 1;
-            depthCombo.forEach(d => {
-                const box = inventory.find(b => b.w === w && b.d === d) || 
-                            inventory.find(b => b.w === d && b.d === w) || // Prøv å rotere
-                            inventory.sort((a,b) => (b.w*b.d) - (a.w*a.d)).find(b => b.w <= w && b.d <= d);
-                
-                if (box) {
-                    placements.push({ sku: box.sku, x: currentX, y: currentY, displayW: w, displayD: d });
+        function backtrack(startIndex) {
+            if (Date.now() - startTime > timeLimit) return false;
+            let idx = -1;
+            for (let i = startIndex; i < W * D; i++) { if (grid[i] === 0) { idx = i; break; } }
+            if (idx === -1) { best = { items: [...placed], coverage: 100 }; return true; }
+
+            for (let item of inventory) {
+                const shapes = [{w: item.w, d: item.d}, {w: item.d, d: item.w}];
+                for (let s of shapes) {
+                    let x = idx % W, y = Math.floor(idx / W);
+                    if (x + s.w <= W && y + s.d <= D) {
+                        let overlap = false;
+                        for (let ry = 0; ry < s.d; ry++) {
+                            for (let rx = 0; rx < s.w; rx++) { if (grid[(y+ry)*W+(x+rx)]===1) { overlap=true; break; } }
+                            if (overlap) break;
+                        }
+                        if (!overlap) {
+                            // Gap-Detection Pruning
+                            if (W - (x+s.w) > 0 && W - (x+s.w) < 10) continue;
+                            
+                            for (let ry = 0; ry < s.d; ry++) {
+                                for (let rx = 0; rx < s.w; rx++) grid[(y+ry)*W+(x+rx)] = 1;
+                            }
+                            placed.push({...item, x, y, actW: s.w, actD: s.d});
+                            if (backtrack(idx + 1)) return true;
+                            placed.pop();
+                            for (let ry = 0; ry < s.d; ry++) {
+                                for (let rx = 0; rx < s.w; rx++) grid[(y+ry)*W+(x+rx)] = 0;
+                            }
+                        }
+                    }
+                    if (item.w === item.d) break;
                 }
-                currentY += d;
-            });
-            currentX += w;
-        });
-        return placements;
-    }
-
-    function render(drawId, listId, W, D, placements) {
-        const draw = document.getElementById(drawId);
-        const list = document.getElementById(listId);
-        draw.innerHTML = ''; list.innerHTML = '';
-        draw.style.gridTemplateColumns = `repeat(${W}, 1fr)`;
-        draw.style.gridTemplateRows = `repeat(${D}, 1fr)`;
-        draw.style.aspectRatio = `${W} / ${D}`;
-
-        let total = 0, summary = {};
-        placements.forEach((p, index) => {
-            const b = inventory.find(x => x.sku === p.sku);
-            total += b.p;
-            summary[b.n] = (summary[b.n] || 0) + 1;
-
-            const el = document.createElement('div');
-            el.className = 'box-unit';
-            el.style.gridColumn = `${p.x} / span ${p.displayW}`;
-            el.style.gridRow = `${p.y} / span ${p.displayD}`;
-            el.style.animationDelay = (index * 0.03) + 's';
-            el.innerText = `${p.displayW}x${p.displayD}`;
-            draw.appendChild(el);
-        });
-
-        for (let n in summary) {
-            const price = inventory.find(x => x.n === n).p;
-            list.innerHTML += `<li><span>${summary[n]}x ${n}</span> <span>${summary[n]*price},-</span></li>`;
+            }
+            let cur = (placed.reduce((acc, i) => acc + (i.actW * i.actD), 0) / (W * D)) * 100;
+            if (cur > best.coverage) best = { items: [...placed], coverage: cur };
+            return false;
         }
-        return total;
+        backtrack(0);
+        return best;
     }
 
-    function toggleAddon(num) {
-        const cb = document.getElementById('addon' + num);
-        cb.checked = !cb.checked;
-        updateTotal(num);
+    function renderCard(title, sub, data, W, D, container, id) {
+        const scale = Math.min(270 / W, 270 / D);
+        let itemsMap = {}; let subtotal = 0;
+        data.items.forEach(i => {
+            if(!itemsMap[i.sku]) itemsMap[i.sku] = { n: i.n, p: i.p, qty: 0 };
+            itemsMap[i.sku].qty++; subtotal += i.p;
+        });
+
+        const rows = Object.values(itemsMap).map(i => `
+            <tr><td>${i.qty}x</td><td>${i.n}</td><td class="text-right">${i.p * i.qty},-</td></tr>
+        `).join('');
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <span class="efficiency-badge">${data.coverage.toFixed(0)}% Utnyttelse</span>
+            <h3>${title}</h3>
+            <p class="subtitle">${sub}</p>
+            <div class="visualizer-area">
+                <div class="drawer-outline" style="width: ${W*scale}px; height: ${D*scale}px;">
+                    ${data.items.map(i => `
+                        <div class="box-item" style="left:${i.x*scale}px; top:${i.y*scale}px; width:${i.actW*scale}px; height:${i.actD*scale}px">
+                            ${i.actW}x${i.actD}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            <table class="list-table">
+                <thead><tr><th>Ant</th><th>Produkt</th><th class="text-right">Sum</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+            <div class="upsell-box">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
+                    <input type="checkbox" onchange="upd(${subtotal}, ${id}, this)"> Legg til Merkelapper
+                </label>
+                <strong>79,-</strong>
+            </div>
+            <div class="total-row">
+                <span style="font-weight:500; color:var(--apple-secondary)">Totalpris</span>
+                <span class="grand-total" id="t-${id}">${subtotal},-</span>
+            </div>
+            <button class="btn" onclick="this.innerText='Lagt i kurv ✅'">Legg i handlekurv</button>
+        `;
+        container.appendChild(card);
     }
 
-    function updateTotal(num) {
-        const isChecked = document.getElementById('addon' + num).checked;
-        const priceEl = document.getElementById('p' + num);
-        const base = (num === 1) ? basePrice1 : basePrice2;
-        priceEl.innerText = (isChecked ? base + ADDON_PRICE : base) + ',-';
+    function upd(base, id, cb) {
+        document.getElementById(`t-${id}`).innerText = (base + (cb.checked ? 79 : 0)) + ',-';
     }
 
-    function addToCart(num) {
-        cartCount++;
-        document.getElementById('cart-nav').innerText = `🛒 Handlekurv (${cartCount})`;
-        const note = document.getElementById('notification');
-        note.style.display = 'block';
-        setTimeout(() => note.style.display = 'none', 3000);
-    }
+    window.onload = runCalculation;
 </script>
 </body>
 </html>
