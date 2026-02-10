@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ryddigst.no - Skreddersydd Orden</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --apple-bg: #ffffff;
@@ -32,15 +32,67 @@
 
         main { max-width: 1100px; margin: 40px auto; padding: 0 20px; min-height: 80vh; }
 
+        /* --- LANDING HERO --- */
+        .landing-hero {
+            text-align: center;
+            padding: 40px 20px;
+            /* Animasjonsegenskaper for slide-up effekt */
+            max-height: 500px;
+            opacity: 1;
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow: hidden;
+        }
+        .landing-hero.collapsed {
+            max-height: 0;
+            opacity: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .landing-hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #1d1d1f 0%, #4a4a4f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .landing-hero p {
+            font-size: 24px;
+            color: var(--apple-secondary);
+            max-width: 650px;
+            margin: 0 auto 40px auto;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        .instruction-badge {
+            display: inline-block;
+            background: #eef2ff;
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
         /* --- CALC BOX --- */
-        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 35px; margin-bottom: 40px; text-align: center; }
+        .calc-box { 
+            background: var(--apple-gray); 
+            border-radius: 30px; 
+            padding: 35px; 
+            margin-bottom: 60px; 
+            text-align: center; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
         .input-group { display: flex; gap: 20px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
         .input-item { display: flex; flex-direction: column; text-align: left; }
         .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 5px; text-transform: uppercase; }
         .input-item input { padding: 12px; border-radius: 10px; border: 1px solid #d2d2d7; width: 100px; font-size: 16px; text-align: center; }
 
         /* --- CARDS & GRID --- */
-        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch; }
+        .results-grid { display: none; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch; animation: slideUp 0.8s ease forwards; opacity: 0; }
         @media (max-width: 850px) { .results-grid { grid-template-columns: 1fr; } }
 
         .card { 
@@ -89,15 +141,14 @@
             box-shadow: 1px 2px 4px rgba(0,0,0,0.05), inset 0 0 0 1px var(--acrylic-highlight);
             backdrop-filter: blur(5px);
             box-sizing: border-box;
-            /* Animasjon */
             opacity: 0;
             transform: scale(0.8);
             animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        @keyframes popIn {
-            to { opacity: 1; transform: scale(1); }
-        }
+        @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- LISTS --- */
         .content-wrap { flex-grow: 1; } 
@@ -153,11 +204,17 @@
 </header>
 
 <main>
+    <div id="landingHero" class="landing-hero">
+        <h1>Fra rot til ro.</h1>
+        <p>Vår smarte algoritme regner ut den matematisk perfekte inndelingen av dine skuffer, slik at du utnytter hver millimeter.</p>
+        <div class="instruction-badge">Taste inn målene dine under for å starte</div>
+    </div>
+
     <div class="calc-box">
         <div class="input-group">
-            <div class="input-item"><label>Bredde (cm)</label><input type="number" id="dW" value="61"></div>
-            <div class="input-item"><label>Dybde (cm)</label><input type="number" id="dD" value="50"></div>
-            <button class="btn btn-update" onclick="runCalculation()">Oppdater beregning</button>
+            <div class="input-item"><label>Bredde (cm)</label><input type="number" id="dW" value="80"></div>
+            <div class="input-item"><label>Dybde (cm)</label><input type="number" id="dD" value="60"></div>
+            <button class="btn btn-update" onclick="runCalculation()">Beregn løsning</button>
         </div>
     </div>
 
@@ -204,11 +261,28 @@
     async function runCalculation() {
         const W = parseInt(document.getElementById('dW').value);
         const D = parseInt(document.getElementById('dD').value);
-        const out = document.getElementById('output');
-        if (!W || !D) return;
+        
+        if (!W || !D) {
+            alert("Vennligst fyll inn både bredde og dybde.");
+            return;
+        }
 
-        out.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 100px;">Beregner...</div>';
-        await new Promise(r => setTimeout(r, 100));
+        // Collapse Hero (CSS Transition)
+        const hero = document.getElementById('landingHero');
+        hero.classList.add('collapsed');
+
+        // Show Grid container
+        const out = document.getElementById('output');
+        out.style.display = 'grid';
+        
+        // Endre tekst på knappen
+        const btns = document.querySelectorAll('.btn-update');
+        btns.forEach(b => b.innerText = "Oppdater beregning");
+
+        out.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 100px;">Analyserer geometri...</div>';
+        
+        // Wait for hero collapse animation
+        await new Promise(r => setTimeout(r, 600));
 
         let l1 = solve(W, D, [...products].sort((a,b) => (b.w*b.d)-(a.w*a.d)), 1200);
         let l2 = null; let maxScore = -1;
@@ -270,11 +344,9 @@
     }
 
     function renderCard(title, sub, data, W, D, container, id) {
-        // SafeScale logikk: 
-        const borderW = 6; // 6px ramme definert i CSS for .drawer-outline
-        const maxDisplaySize = 270; // Maksimal bredde/høyde for selve boksene
-        
-        // Vi regner ut skala basert på tilgjengelig plass INNE i rammen
+        // SafeScale logic
+        const borderW = 6; 
+        const maxDisplaySize = 270; 
         const availableSpace = maxDisplaySize - (borderW * 2);
         const scale = Math.min(availableSpace / W, availableSpace / D);
 
@@ -327,8 +399,6 @@
     function upd(base, id, cb) {
         document.getElementById(`t-${id}`).innerText = (base + (cb.checked ? 79 : 0)) + ',-';
     }
-
-    window.onload = runCalculation;
 </script>
 </body>
 </html>
