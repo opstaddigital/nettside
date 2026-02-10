@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryddigst.no - Presisjonsvisning</title>
+    <title>Ryddigst.no - Skreddersydd Orden</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,8 +14,6 @@
             --accent: #0071e3;
             --drawer-wood: #d1d1d1;
             --drawer-inside: #e5e5e5;
-            
-            /* Akryl-effekt */
             --acrylic-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 245, 255, 0.6) 100%);
             --acrylic-edge: rgba(0, 0, 0, 0.08);
             --acrylic-highlight: rgba(255, 255, 255, 0.8);
@@ -24,28 +22,41 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; }
 
+        /* --- HEADER --- */
         header { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 70px; padding: 0 20px; }
-        .logo-link img { height: 50px; width: auto; display: block; object-fit: contain; }
+        .logo-link img { height: 45px; width: auto; display: block; object-fit: contain; }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { font-size: 13px; color: var(--apple-secondary); text-decoration: none; font-weight: 500; }
+        .nav-links a:hover { color: var(--apple-text); }
 
-        main { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        main { max-width: 1100px; margin: 40px auto; padding: 0 20px; min-height: 80vh; }
 
-        /* HERO / CALC BOX */
-        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 30px; margin-bottom: 40px; text-align: center; }
+        /* --- CALC BOX --- */
+        .calc-box { background: var(--apple-gray); border-radius: 30px; padding: 35px; margin-bottom: 40px; text-align: center; }
         .input-group { display: flex; gap: 20px; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
         .input-item { display: flex; flex-direction: column; text-align: left; }
         .input-item label { font-size: 11px; font-weight: 700; color: var(--apple-secondary); margin-bottom: 5px; text-transform: uppercase; }
         .input-item input { padding: 12px; border-radius: 10px; border: 1px solid #d2d2d7; width: 100px; font-size: 16px; text-align: center; }
 
-        /* RESULTS */
-        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        /* --- CARDS & GRID --- */
+        .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch; }
         @media (max-width: 850px) { .results-grid { grid-template-columns: 1fr; } }
 
-        .card { background: white; border-radius: 28px; padding: 30px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
-        .card h3 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+        .card { 
+            background: white; 
+            border-radius: 28px; 
+            padding: 30px; 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04); 
+            display: flex; 
+            flex-direction: column;
+            height: 100%; 
+        }
+        .card h3 { font-size: 20px; font-weight: 600; margin-bottom: 5px; }
         .card .subtitle { font-size: 13px; color: var(--apple-secondary); margin-bottom: 20px; }
 
-        /* VISUALIZER */
+        /* --- DRAWER VIZ --- */
         .visualizer-area {
             background: #f0f0f2;
             padding: 40px;
@@ -59,10 +70,11 @@
         .drawer-outline {
             position: relative;
             background: #ffffff;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05), 0 20px 50px rgba(0,0,0,0.15);
-            border: 6px solid #333;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05), 0 15px 35px rgba(0,0,0,0.1);
+            border: 6px solid #333; /* Fast skuffekant */
             border-radius: 4px;
         }
+        
         .box-item {
             position: absolute;
             background: var(--acrylic-surface);
@@ -73,37 +85,53 @@
             justify-content: center;
             font-size: 10px;
             font-weight: 700;
-            color: rgba(0,0,0,0.4);
-            box-shadow: 1px 2px 4px rgba(0,0,0,0.08), inset 0 0 0 1px var(--acrylic-highlight);
+            color: rgba(0,0,0,0.3);
+            box-shadow: 1px 2px 4px rgba(0,0,0,0.05), inset 0 0 0 1px var(--acrylic-highlight);
             backdrop-filter: blur(5px);
             box-sizing: border-box;
+            /* Animasjon */
+            opacity: 0;
+            transform: scale(0.8);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* BILLING / LIST */
-        .list-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
-        .list-table th { text-align: left; color: var(--apple-secondary); padding-bottom: 10px; border-bottom: 1px solid #eee; font-weight: 500; }
-        .list-table td { padding: 12px 0; border-bottom: 1px solid #f9f9f9; }
+        @keyframes popIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- LISTS --- */
+        .content-wrap { flex-grow: 1; } 
+        .list-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+        .list-table th { text-align: left; color: var(--apple-secondary); padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .list-table td { padding: 10px 0; border-bottom: 1px solid #f9f9f9; }
         .text-right { text-align: right; }
 
         .upsell-box {
             background: var(--apple-gray);
-            padding: 15px;
-            border-radius: 14px;
+            padding: 12px 15px;
+            border-radius: 12px;
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .total-row { display: flex; justify-content: space-between; align-items: baseline; padding-top: 15px; border-top: 1px solid #eee; }
-        .grand-total { font-size: 26px; font-weight: 700; }
+        .grand-total { font-size: 24px; font-weight: 700; }
 
-        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-weight: 600; font-size: 15px; margin-top: 20px; cursor: pointer; transition: all 0.2s; }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn { background: var(--apple-text); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-weight: 600; font-size: 14px; margin-top: 20px; cursor: pointer; transition: all 0.2s; }
+        .btn:hover { opacity: 0.9; }
         .btn-update { background: var(--accent); width: auto; margin-top: 0; padding: 12px 25px; }
 
-        .efficiency-badge { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; display: block; }
+        /* --- FOOTER --- */
+        footer { background: #f5f5f7; padding: 60px 20px; margin-top: 80px; }
+        .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+        .footer-col h4 { font-size: 12px; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .footer-col ul { list-style: none; font-size: 12px; color: var(--apple-secondary); }
+        .footer-col li { margin-bottom: 10px; cursor: pointer; }
+        .footer-col li:hover { color: var(--apple-text); }
+        .copy { text-align: center; font-size: 11px; color: var(--apple-secondary); margin-top: 60px; }
     </style>
 </head>
 <body>
@@ -111,16 +139,24 @@
 <header>
     <div class="nav-container">
         <a href="#" class="logo-link">
-            <img src="pnglogo.png" alt="ryddigst.no" onerror="this.outerHTML='<span style=\'font-weight:700; font-size:24px\'>Ryddigst.no</span>'">
+            <img src="pnglogo.png" alt="ryddigst.no" onerror="this.outerHTML='<span style=\'font-weight:700; font-size:22px\'>ryddigst.no</span>'">
         </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">Bokser</a></li>
+                <li><a href="#">Systemer</a></li>
+                <li><a href="#">Om oss</a></li>
+                <li><a href="#">Kundeservice</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
 
 <main>
     <div class="calc-box">
         <div class="input-group">
-            <div class="input-item"><label>Bredde (cm)</label><input type="number" id="drawerW" value="61"></div>
-            <div class="input-item"><label>Dybde (cm)</label><input type="number" id="drawerD" value="50"></div>
+            <div class="input-item"><label>Bredde (cm)</label><input type="number" id="dW" value="61"></div>
+            <div class="input-item"><label>Dybde (cm)</label><input type="number" id="dD" value="50"></div>
             <button class="btn btn-update" onclick="runCalculation()">Oppdater beregning</button>
         </div>
     </div>
@@ -128,6 +164,28 @@
     <div class="results-grid" id="output">
         </div>
 </main>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-col">
+            <h4>Produkter</h4>
+            <ul><li>Premium Akryl</li><li>Inndelere</li><li>Merkelapper</li><li>Gavekort</li></ul>
+        </div>
+        <div class="footer-col">
+            <h4>Kundeservice</h4>
+            <ul><li>Frakt og retur</li><li>Sikker betaling</li><li>Kontakt oss</li><li>FAQ</li></ul>
+        </div>
+        <div class="footer-col">
+            <h4>Om Ryddigst</h4>
+            <ul><li>Vår historie</li><li>Bærekraft</li><li>Inspirasjon</li><li>Jobb hos oss</li></ul>
+        </div>
+        <div class="footer-col">
+            <h4>Kontakt</h4>
+            <ul><li>hei@ryddigst.no</li><li>Oslo, Norge</li><li>Tlf: 22 33 44 55</li></ul>
+        </div>
+    </div>
+    <p class="copy">&copy; 2026 Ryddigst.no — Alle rettigheter reservert.</p>
+</footer>
 
 <script>
     const products = [
@@ -144,17 +202,15 @@
     ];
 
     async function runCalculation() {
-        const W = parseInt(document.getElementById('drawerW').value);
-        const D = parseInt(document.getElementById('drawerD').value);
+        const W = parseInt(document.getElementById('dW').value);
+        const D = parseInt(document.getElementById('dD').value);
         const out = document.getElementById('output');
         if (!W || !D) return;
 
-        out.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 50px;">Optimaliserer din skuff...</div>';
+        out.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 100px;">Beregner...</div>';
         await new Promise(r => setTimeout(r, 100));
 
-        // Alt 1: Effektivitet
         let l1 = solve(W, D, [...products].sort((a,b) => (b.w*b.d)-(a.w*a.d)), 1200);
-        // Alt 2: Variasjon
         let l2 = null; let maxScore = -1;
         for(let i=0; i<15; i++) {
             let res = solve(W, D, [...products].sort(() => Math.random()-0.5), 300);
@@ -163,8 +219,8 @@
         }
 
         out.innerHTML = '';
-        renderCard('Alternativ 1: Minimalistisk', 'Færrest mulig bokser for et rent uttrykk.', l1, W, D, out, 1);
-        renderCard('Alternativ 2: Maks organisering', 'Maksimal inndeling for perfekt sortering.', l2, W, D, out, 2);
+        renderCard('Basis Oppsett', 'Fokus på store flater og færrest mulig deler.', l1, W, D, out, 1);
+        renderCard('Detaljert Oppsett', 'Maksimal inndeling for perfekt sortering.', l2, W, D, out, 2);
     }
 
     function solve(W, D, inventory, timeLimit) {
@@ -190,9 +246,7 @@
                             if (overlap) break;
                         }
                         if (!overlap) {
-                            // Gap-Detection Pruning
                             if (W - (x+s.w) > 0 && W - (x+s.w) < 10) continue;
-                            
                             for (let ry = 0; ry < s.d; ry++) {
                                 for (let rx = 0; rx < s.w; rx++) grid[(y+ry)*W+(x+rx)] = 1;
                             }
@@ -216,7 +270,14 @@
     }
 
     function renderCard(title, sub, data, W, D, container, id) {
-        const scale = Math.min(270 / W, 270 / D);
+        // SafeScale logikk: 
+        const borderW = 6; // 6px ramme definert i CSS for .drawer-outline
+        const maxDisplaySize = 270; // Maksimal bredde/høyde for selve boksene
+        
+        // Vi regner ut skala basert på tilgjengelig plass INNE i rammen
+        const availableSpace = maxDisplaySize - (borderW * 2);
+        const scale = Math.min(availableSpace / W, availableSpace / D);
+
         let itemsMap = {}; let subtotal = 0;
         data.items.forEach(i => {
             if(!itemsMap[i.sku]) itemsMap[i.sku] = { n: i.n, p: i.p, qty: 0 };
@@ -230,27 +291,29 @@
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-            <span class="efficiency-badge">${data.coverage.toFixed(0)}% Utnyttelse</span>
-            <h3>${title}</h3>
-            <p class="subtitle">${sub}</p>
-            <div class="visualizer-area">
-                <div class="drawer-outline" style="width: ${W*scale}px; height: ${D*scale}px;">
-                    ${data.items.map(i => `
-                        <div class="box-item" style="left:${i.x*scale}px; top:${i.y*scale}px; width:${i.actW*scale}px; height:${i.actD*scale}px">
-                            ${i.actW}x${i.actD}
-                        </div>
-                    `).join('')}
+            <div class="content-wrap">
+                <span style="font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase">${data.coverage.toFixed(0)}% dekn.</span>
+                <h3>${title}</h3>
+                <p class="subtitle">${sub}</p>
+                <div class="visualizer-area">
+                    <div class="drawer-outline" style="width: ${(W * scale) + (borderW * 2)}px; height: ${(D * scale) + (borderW * 2)}px;">
+                        ${data.items.map((i, index) => `
+                            <div class="box-item" style="left:${i.x*scale}px; top:${i.y*scale}px; width:${i.actW*scale}px; height:${i.actD*scale}px; animation-delay: ${index * 0.05}s">
+                                ${i.actW}x${i.actD}
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-            </div>
-            <table class="list-table">
-                <thead><tr><th>Ant</th><th>Produkt</th><th class="text-right">Sum</th></tr></thead>
-                <tbody>${rows}</tbody>
-            </table>
-            <div class="upsell-box">
-                <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
-                    <input type="checkbox" onchange="upd(${subtotal}, ${id}, this)"> Legg til Merkelapper
-                </label>
-                <strong>79,-</strong>
+                <table class="list-table">
+                    <thead><tr><th>Ant</th><th>Produkt</th><th class="text-right">Sum</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                <div class="upsell-box">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer">
+                        <input type="checkbox" onchange="upd(${subtotal}, ${id}, this)"> Merkelapper (Pakke)
+                    </label>
+                    <strong>79,-</strong>
+                </div>
             </div>
             <div class="total-row">
                 <span style="font-weight:500; color:var(--apple-secondary)">Totalpris</span>
